@@ -1,0 +1,273 @@
+.progress-page {
+    display: grid;
+    gap: 20px;
+}
+
+.overall-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.overall-grid article,
+.overall-bar-card,
+.progress-device-card,
+.progress-section-card {
+    background: #ffffff;
+    border: 1px solid #d8e5ec;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.overall-grid span,
+.status-grid span {
+    color: #5d6b82;
+    display: block;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.overall-grid strong {
+    color: #0f3443;
+    display: block;
+    font-size: 1.8rem;
+    line-height: 1;
+}
+
+.section-heading-row,
+.device-card-heading {
+    align-items: center;
+    display: flex;
+    gap: 14px;
+    justify-content: space-between;
+}
+
+.section-heading-row h2,
+.device-card-heading h2 {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.large-progress-bar {
+    background: #e8f0f5;
+    border-radius: 999px;
+    height: 14px;
+    margin-top: 16px;
+    overflow: hidden;
+}
+
+.large-progress-bar span {
+    background: #0f766e;
+    display: block;
+    height: 100%;
+}
+
+.device-progress-list {
+    display: grid;
+    gap: 18px;
+}
+
+.progress-device-card {
+    display: grid;
+    gap: 16px;
+}
+
+.device-card-heading {
+    justify-content: flex-start;
+}
+
+.device-icon {
+    align-items: center;
+    background: linear-gradient(135deg, #e0f2fe, #ccfbf1);
+    border: 1px solid #bae6fd;
+    border-radius: 8px;
+    color: #075985;
+    display: flex;
+    font-weight: 900;
+    height: 64px;
+    justify-content: center;
+    width: 64px;
+}
+
+.device-card-heading p {
+    color: #5d6b82;
+    margin: 4px 0 0;
+}
+
+.status-grid {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.status-grid div {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 14px;
+}
+
+.status-grid strong {
+    color: #0f3443;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.status-grid a {
+    color: #1864ab;
+    font-weight: 900;
+}
+
+.section-heading-row p {
+    color: #5d6b82;
+    margin: 4px 0 0;
+}
+
+.achievement-grid {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 18px;
+}
+
+.achievement-card {
+    align-items: center;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    display: grid;
+    gap: 12px;
+    grid-template-columns: 46px minmax(0, 1fr);
+    padding: 16px;
+}
+
+.achievement-card.earned {
+    background: #f0fdf4;
+    border-color: #a7f3c4;
+}
+
+.achievement-icon {
+    align-items: center;
+    background: #e8f0f5;
+    border-radius: 50%;
+    color: #64748b;
+    display: flex;
+    font-weight: 900;
+    height: 42px;
+    justify-content: center;
+    width: 42px;
+}
+
+.achievement-card.earned .achievement-icon {
+    background: #19a974;
+    color: #ffffff;
+}
+
+.achievement-card h3 {
+    font-size: 0.98rem;
+    margin: 0 0 3px;
+}
+
+.achievement-card p {
+    color: #5d6b82;
+    margin: 0;
+}
+
+.progress-lower-grid {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+}
+
+.action-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.action-list a {
+    background: #f8fafc;
+    border: 1px solid #d9e2ec;
+    border-radius: 8px;
+    color: #172033;
+    font-weight: 800;
+    padding: 12px 14px;
+}
+
+.action-list a:hover {
+    border-color: #1864ab;
+    color: #1864ab;
+}
+
+.learning-timeline ul {
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+}
+
+.learning-timeline li {
+    border-bottom: 1px solid #e5edf5;
+    color: #5d6b82;
+    display: grid;
+    gap: 12px;
+    grid-template-columns: 16px minmax(0, 1fr);
+    padding: 12px 0;
+}
+
+.learning-timeline li:last-child {
+    border-bottom: 0;
+}
+
+.timeline-dot {
+    background: #2dd4bf;
+    border: 3px solid #e0f7f4;
+    border-radius: 50%;
+    height: 14px;
+    margin-top: 3px;
+    width: 14px;
+}
+
+.learning-timeline strong {
+    color: #172033;
+}
+
+.learning-timeline p {
+    margin: 3px 0;
+}
+
+.learning-timeline small {
+    color: #94a3b8;
+    font-weight: 800;
+}
+
+.empty-analytics-state {
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 8px;
+    color: #5d6b82;
+    margin-top: 14px;
+    padding: 16px;
+}
+
+.empty-analytics-state strong {
+    color: #172033;
+}
+
+.empty-analytics-state p {
+    margin: 6px 0 0;
+}
+
+@media (max-width: 900px) {
+    .overall-grid,
+    .status-grid,
+    .achievement-grid,
+    .progress-lower-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-heading-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+}

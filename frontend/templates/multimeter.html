@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/multimeter.css') }}?v=dmm-simulation-switcher-1">
+{% endblock %}
+
+{% block content %}
+<section class="sim-hero">
+    <div>
+        <h1>Digital Multimeter Lab</h1>
+        <p>
+            Practice meter ranges, probe placement, and realistic beginner measurements.
+        </p>
+    </div>
+    <nav class="page-link-group" aria-label="Digital multimeter lab navigation">
+        <a class="back-link" href="{{ url_for('tutorials.multimeter') }}">Tutorial</a>
+        <a class="back-link" href="{{ url_for('assessments.multimeter') }}">Assessment</a>
+        <a class="back-link" href="{{ url_for('backend.progress') }}#multimeter">Progress</a>
+        <label class="simulation-switcher">
+            <span>Switch Simulation</span>
+            <select aria-label="Switch simulation" onchange="if (this.value) window.location.href = this.value;">
+                <option value="" selected disabled>Digital Multimeter (Current)</option>
+                <option value="/simulations/oscilloscope">Oscilloscope</option>
+                <option value="/simulations/arduino">Arduino Lab</option>
+            </select>
+        </label>
+        <span class="module-status">Module Ready</span>
+    </nav>
+</section>
+
+<div class="dmm-lab-grid" aria-label="Digital multimeter virtual laboratory">
+    <main class="dmm-workbench-main" aria-label="Digital multimeter workbench">
+        <section class="dmm-status-row" aria-label="Probe and measurement status">
+            <section class="workspace-card probe-status-card">
+                <h2>Probe Status</h2>
+                <div class="probe-status-grid">
+                    <p>Black Probe:<strong id="blackProbePortStatus">not connected</strong><span id="blackProbeTipStatus">not placed</span></p>
+                    <p>Red Probe:<strong id="redProbePortStatus">not connected</strong><span id="redProbeTipStatus">not placed</span></p>
+                </div>
+                <p class="selected-probe-line">Selected probe: <strong id="selectedProbeStatus">Black probe</strong></p>
+            </section>
+
+            <section class="workspace-card result-feedback-card live-measurement-card">
+                <h2>Live Measurement Display</h2>
+                <strong id="feedbackReading" class="live-reading-value">No reading yet</strong>
+                <div class="feedback-detail-grid">
+                    <span>Setup</span>
+                    <strong id="feedbackSetup">Waiting for measurement</strong>
+                </div>
+                <p id="resultFeedback">Meter is OFF. Select a range on the rotary selector to prepare the lab.</p>
+                <div class="future-readings" aria-label="Example readings">
+                    <span>9.00 V</span>
+                    <span>220 Ω</span>
+                    <span>OL</span>
+                    <span>OPEN</span>
+                    <span>CONTINUITY</span>
+                    <span>-9.00 V</span>
+                </div>
+            </section>
+        </section>
+
+        <section class="dmm-bench-stage">
+            <aside class="dmm-components-panel" aria-label="Components panel">
+                <section class="workspace-card tray-card">
+                    <div class="workspace-heading">
+                        <h2>Components</h2>
+                        <p>Select parts for the circuit workspace.</p>
+                    </div>
+
+                    <div class="object-tray" id="objectTray">
+                        <button class="object-card" type="button" data-object="9V Battery" data-reading="Future reading: about 8.90 V on DC voltage.">
+                            <span class="object-icon battery-icon"></span>
+                            <strong>Battery</strong>
+                            <small>9V DC source</small>
+                        </button>
+                        <button class="object-card" type="button" data-object="Lamp Circuit" data-reading="Future reading: voltage, continuity, or resistance depending on task.">
+                            <span class="object-icon lamp-icon"></span>
+                            <strong>Lamp</strong>
+                            <small>Practice circuit</small>
+                        </button>
+                        <button class="object-card" type="button" data-object="LED" data-reading="Visual placeholder for later diode tests.">
+                            <span class="object-icon led-icon"></span>
+                            <strong>LED</strong>
+                            <small>Indicator</small>
+                        </button>
+                        <button class="object-card" type="button" data-object="220 Ohm Resistor" data-reading="Future reading: about 220 Ohm on resistance range.">
+                            <span class="object-icon resistor-icon"></span>
+                            <strong>Resistor</strong>
+                            <small>220 Ω</small>
+                        </button>
+                        <button class="object-card" type="button" data-object="Closed Wire" data-reading="Future reading: BEEP during continuity testing.">
+                            <span class="object-icon closed-wire-icon"></span>
+                            <strong>Wire</strong>
+                            <small>Conductor</small>
+                        </button>
+                        <button class="object-card" type="button" data-object="Switch" data-reading="Visual placeholder for switch tests.">
+                            <span class="object-icon switch-icon"></span>
+                            <strong>Switch</strong>
+                            <small>Open/closed</small>
+                        </button>
+                        <button class="object-card" type="button" data-object="Good Fuse" data-reading="Future reading: BEEP or low resistance in continuity mode.">
+                            <span class="object-icon fuse-icon"></span>
+                            <strong>Fuse</strong>
+                            <small>Continuity</small>
+                        </button>
+                        <button class="object-card" type="button" data-object="Capacitor" data-reading="Visual placeholder for capacitance tests.">
+                            <span class="object-icon capacitor-icon"></span>
+                            <strong>Capacitor</strong>
+                            <small>Stored charge</small>
+                        </button>
+                        <button class="object-card" type="button" data-object="Diode" data-reading="Visual placeholder for diode tests.">
+                            <span class="object-icon diode-icon"></span>
+                            <strong>Diode</strong>
+                            <small>One-way path</small>
+                        </button>
+                        <button class="object-card" type="button" data-object="Transistor" data-reading="Visual placeholder for transistor tests.">
+                            <span class="object-icon transistor-icon"></span>
+                            <strong>Transistor</strong>
+                            <small>hFE area</small>
+                        </button>
+                        <button class="object-card" type="button" data-object="AC Outlet" data-reading="Future reading: AC voltage range required.">
+                            <span class="object-icon outlet-icon"></span>
+                            <strong>AC Source</strong>
+                            <small>AC voltage</small>
+                        </button>
+                    </div>
+                </section>
+            </aside>
+
+            <div class="dmm-meter-column">
+                <article class="dmm-meter" aria-label="Realistic digital multimeter visual">
+                    <div class="meter-top">
+                        <div class="meter-brand-row">
+                            <span>VTALP DMM-300</span>
+                            <span>CAT II 600V</span>
+                        </div>
+
+                        <div class="meter-display" aria-live="polite">
+                            <span class="display-mode" id="displayMode">OFF</span>
+                            <span class="display-value" id="displayValue">OFF</span>
+                            <span class="display-unit" id="displayUnit"></span>
+                        </div>
+                    </div>
+
+                    <div class="selector-zone" aria-label="Rotary selector controls">
+                        <!-- Selector labels control the active meter mode, display readiness text, and measurement guidance. -->
+                        <button class="range-label label-off active" type="button" data-selector="off">OFF</button>
+                        <button class="range-label label-continuity" type="button" data-selector="continuity">Continuity</button>
+                        <button class="range-label label-200ohm" type="button" data-selector="r200">200Ω</button>
+                        <button class="range-label label-2kohm" type="button" data-selector="r2k">2kΩ</button>
+                        <button class="range-label label-20kohm" type="button" data-selector="r20k">20kΩ</button>
+                        <button class="range-label label-200kohm" type="button" data-selector="r200k">200kΩ</button>
+                        <button class="range-label label-2mohm" type="button" data-selector="r2m">2MΩ</button>
+                        <button class="range-label label-dc20" type="button" data-selector="dc20">DC 20V</button>
+                        <button class="range-label label-dc200" type="button" data-selector="dc200">DC 200V</button>
+                        <button class="range-label label-ac200" type="button" data-selector="ac200">AC 200V</button>
+                        <button class="range-label label-ac750" type="button" data-selector="ac750">AC 750V</button>
+                        <button class="range-label label-dc10a" type="button" data-selector="dc10a">DC 10A</button>
+
+                        <button class="rotary-knob" id="rotaryKnob" type="button" aria-label="Rotate selector knob to next range">
+                            <span class="knob-pointer"></span>
+                            <span class="knob-grip"></span>
+                        </button>
+                    </div>
+
+                    <div class="transistor-area" aria-label="Visual transistor testing area">
+                        <span>hFE</span>
+                        <div class="transistor-socket">
+                            <i>E</i>
+                            <i>B</i>
+                            <i>C</i>
+                        </div>
+                        <p>Transistor test area - visual placeholder</p>
+                    </div>
+
+                    <div class="port-panel" aria-label="Probe input ports">
+                        <!-- Ports are clickable/drop targets for red and black probe connections. -->
+                        <button class="meter-port port-10a" type="button" data-port="10A" title="10A current input">
+                            <span>10A</span>
+                            <small>Current</small>
+                        </button>
+                        <button class="meter-port port-voma" type="button" data-port="VΩmA" title="Voltage, resistance, and milliamp input">
+                            <span>VΩmA</span>
+                            <small>V / Ω / mA</small>
+                        </button>
+                        <button class="meter-port port-com" type="button" data-port="COM" title="Common black probe input">
+                            <span>COM</span>
+                            <small>Black lead</small>
+                        </button>
+                    </div>
+                </article>
+            </div>
+
+            <section class="workspace-card placement-card">
+                <h2>Circuit Workspace</h2>
+                <div class="object-workbench" id="objectWorkbench">
+                    <span class="bench-label">Selected component</span>
+                    <strong id="selectedObjectName">No component selected</strong>
+                    <p>Place both probe tips on the object test points, then press Measure to simulate a real reading.</p>
+                    <!-- JavaScript renders the selected object here so each component can expose its own valid test points. -->
+                    <div class="workbench-object" id="workbenchObject" aria-live="polite"></div>
+                    <button class="measure-button" id="measureButton" type="button">Measure</button>
+                    <button class="bench-probe bench-black-probe draggable-probe" type="button" draggable="true" data-probe="black" aria-label="Drag black probe tip">
+                        <span></span>
+                    </button>
+                    <button class="bench-probe bench-red-probe draggable-probe" type="button" draggable="true" data-probe="red" aria-label="Drag red probe tip">
+                        <span></span>
+                    </button>
+                </div>
+            </section>
+        </section>
+
+        <div class="probe-visuals" aria-label="Interactive probe controls">
+            <button class="probe-line black-line draggable-probe active" type="button" draggable="true" data-probe="black">
+                <span class="probe-handle"></span>
+                <span class="probe-tip"></span>
+                <strong>Black Probe</strong>
+            </button>
+            <button class="probe-line red-line draggable-probe" type="button" draggable="true" data-probe="red">
+                <span class="probe-handle"></span>
+                <span class="probe-tip"></span>
+                <strong>Red Probe</strong>
+            </button>
+        </div>
+
+        <section class="learning-assistant" aria-label="Compact learning assistant">
+            <section class="panel-card compact-guide-card">
+                <div>
+                    <span id="guideStepLabel" class="guide-step-label">Step 1 of 4</span>
+                    <p id="guideInstruction">Select a meter range.</p>
+                </div>
+                <div class="guide-controls">
+                    <button class="guide-button" id="guidePrevButton" type="button">Previous</button>
+                    <button class="guide-button" id="guideNextButton" type="button">Next</button>
+                </div>
+            </section>
+
+            <section class="panel-card assistant-accordion" aria-label="Learning assistant details">
+                <div class="assistant-item active">
+                    <button class="assistant-toggle" type="button" data-assistant-section="mode" aria-expanded="true">
+                        <span>▼ Selected Mode</span>
+                    </button>
+                    <p class="assistant-panel" id="modeExplanation">
+                        Select a rotary range to prepare the meter.
+                    </p>
+                </div>
+                <div class="assistant-item">
+                    <button class="assistant-toggle" type="button" data-assistant-section="safety" aria-expanded="false">
+                        <span>▶ Safety Tips</span>
+                    </button>
+                    <p class="assistant-panel safety-warning" id="safetyWarning" hidden>
+                        Meter is OFF. Select a safe range before connecting probes.
+                    </p>
+                </div>
+                <div class="assistant-item">
+                    <button class="assistant-toggle" type="button" data-assistant-section="guide" aria-expanded="false">
+                        <span>▶ Step-by-Step Guide</span>
+                    </button>
+                    <p class="assistant-panel" id="measurementExplanation" hidden>
+                        Choose a component, place both probes, then press Measure.
+                    </p>
+                </div>
+            </section>
+        </section>
+    </main>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/multimeter.js') }}?v=dmm-probe-orientation-2"></script>
+{% endblock %}

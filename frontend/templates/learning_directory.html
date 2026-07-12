@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/directory.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-shell">
+    {% include "_dashboard_sidebar.html" %}
+
+    <section class="dashboard-main directory-main">
+        <header class="dashboard-topbar">
+            <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-controls="dashboardSidebar" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div>
+                <p class="dashboard-kicker">{{ eyebrow }}</p>
+                <h1>{{ title }}</h1>
+                <p class="dashboard-subtitle">{{ message }}</p>
+            </div>
+        </header>
+
+        {% if flow_steps %}
+        <section class="flow-strip" aria-label="Recommended learning flow">
+            {% for step in flow_steps %}
+            <article class="{% if step.active %}active{% endif %}">
+                <span>{{ step.step }}</span>
+                <strong>{{ step.label }}</strong>
+            </article>
+            {% endfor %}
+        </section>
+        {% endif %}
+
+        <section class="directory-grid" aria-label="{{ title }} modules">
+            {% for item in items %}
+            <article class="directory-card">
+                <div>
+                    <span class="device-category">{{ item.category }}</span>
+                    <h2>{{ item.name }}</h2>
+                    <p>{{ item.description }}</p>
+                </div>
+
+                <dl class="directory-meta">
+                    {% for meta in item.meta %}
+                    <div>
+                        <dt>{{ meta.label }}</dt>
+                        <dd>{{ meta.value }}</dd>
+                    </div>
+                    {% endfor %}
+                </dl>
+
+                <a class="dash-button primary-action" href="{{ item.url }}">{{ item.action_label }}</a>
+            </article>
+            {% endfor %}
+        </section>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

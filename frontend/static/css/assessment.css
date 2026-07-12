@@ -1,0 +1,175 @@
+.assessment-hero {
+    align-items: center;
+    background: #f2f7fb;
+    border-bottom: 1px solid #d8e5ec;
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    padding: 38px max(20px, calc((100vw - 1160px) / 2));
+}
+
+.assessment-hero h1 {
+    font-size: clamp(2rem, 4vw, 3.15rem);
+    margin-bottom: 10px;
+}
+
+.assessment-hero p:last-child {
+    color: #4b5f6b;
+    max-width: 760px;
+}
+
+.back-link {
+    background: #ffffff;
+    border: 1px solid #c4d3dc;
+    border-radius: 8px;
+    color: #175c75;
+    font-weight: 800;
+    padding: 12px 16px;
+    white-space: nowrap;
+}
+
+.assessment-layout {
+    align-items: start;
+    display: grid;
+    gap: 22px;
+    grid-template-columns: 300px minmax(0, 1fr);
+    margin: 0 auto;
+    max-width: 1160px;
+    padding: 26px 20px 56px;
+}
+
+.assessment-status,
+.assessment-form {
+    background: #ffffff;
+    border: 1px solid #d8e5ec;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.assessment-status {
+    position: sticky;
+    top: 18px;
+}
+
+.assessment-status h2 {
+    font-size: 1.12rem;
+    margin-bottom: 12px;
+}
+
+.score-display {
+    color: #0f3443;
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+.pass-message {
+    background: #f6fafb;
+    border-radius: 8px;
+    color: #334155;
+    margin-bottom: 14px;
+    padding: 10px;
+}
+
+.pass-message.pass {
+    background: #ecfdf3;
+    color: #166534;
+}
+
+.pass-message.fail {
+    background: #fff7ed;
+    color: #9a3412;
+}
+
+.retake-button,
+.dashboard-button,
+.submit-button {
+    border-radius: 8px;
+    cursor: pointer;
+    display: block;
+    font: inherit;
+    font-weight: 900;
+    padding: 11px 14px;
+    text-align: center;
+    width: 100%;
+}
+
+.retake-button,
+.submit-button {
+    background: #175c75;
+    border: 0;
+    color: #ffffff;
+}
+
+.dashboard-button {
+    background: #ffffff;
+    border: 1px solid #c4d3dc;
+    color: #175c75;
+    margin-top: 10px;
+}
+
+.assessment-form {
+    display: grid;
+    gap: 14px;
+}
+
+.assessment-form fieldset {
+    border: 1px solid #e1e8ee;
+    border-radius: 8px;
+    padding: 14px;
+}
+
+.assessment-form legend {
+    color: #0f3443;
+    font-weight: 900;
+    padding: 0 6px;
+}
+
+.assessment-form label {
+    color: #334155;
+    display: block;
+    margin-top: 9px;
+}
+
+.assessment-form fieldset.correct {
+    background: #ecfdf3;
+    border-color: #a7f3c4;
+}
+
+.assessment-form fieldset.incorrect {
+    background: #fff1f2;
+    border-color: #fecdd3;
+}
+
+.feedback-panel {
+    background: #f6fafb;
+    border-radius: 8px;
+    color: #334155;
+    display: none;
+    padding: 14px;
+}
+
+.feedback-panel.visible {
+    display: block;
+}
+
+.feedback-panel ul {
+    margin: 8px 0 0;
+    padding-left: 20px;
+}
+
+@media (max-width: 860px) {
+    .assessment-hero {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 32px 20px;
+    }
+
+    .assessment-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .assessment-status {
+        position: static;
+    }
+}

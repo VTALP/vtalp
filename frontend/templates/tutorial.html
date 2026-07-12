@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tutorial.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="tutorial-hero">
+    <div>
+        <p class="eyebrow">Guided Tutorial</p>
+        <h1>{{ tutorial.title }}</h1>
+        <p>{{ tutorial.summary }}</p>
+    </div>
+    <a class="back-link" href="{{ url_for('backend.dashboard') }}">Return to Dashboard</a>
+</section>
+
+<section class="tutorial-layout" data-tutorial="{{ tutorial.slug }}" aria-label="{{ tutorial.device }} tutorial">
+    <aside class="tutorial-progress-card">
+        <h2>Progress</h2>
+        <div class="progress-meter" aria-label="Tutorial completion">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p><strong id="progressPercent">0%</strong> completed</p>
+        <div class="badge-row">
+            <span class="badge" id="lessonBadge">Lesson In Progress</span>
+            <span class="badge" id="tutorialBadge">Tutorial In Progress</span>
+        </div>
+        <button class="complete-button" type="button" id="markCompleteButton">
+            Mark Lesson Completed
+        </button>
+    </aside>
+
+    <article class="tutorial-content">
+        <section class="tutorial-card">
+            <h2>Learning Objectives</h2>
+            <ul class="check-list">
+                {% for objective in tutorial.objectives %}
+                <li>{{ objective }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section class="tutorial-card">
+            <h2>Lesson Content</h2>
+            {% for lesson in tutorial.lessons %}
+            <div class="lesson-block">
+                <h3>{{ lesson.heading }}</h3>
+                <p>{{ lesson.body }}</p>
+            </div>
+            {% endfor %}
+        </section>
+
+        <section class="diagram-card">
+            <div class="diagram-summary" aria-label="{{ tutorial.device }} diagram summary">
+                <span>{{ tutorial.device }}</span>
+                <p>{{ tutorial.diagram_label }}</p>
+            </div>
+        </section>
+
+        <section class="tutorial-card">
+            <h2>Step-by-Step Instructions</h2>
+            <ol class="step-list">
+                {% for step in tutorial.steps %}
+                <li>{{ step }}</li>
+                {% endfor %}
+            </ol>
+        </section>
+
+        <section class="tutorial-card">
+            <h2>Practice Activities</h2>
+            <ul class="activity-list">
+                {% for activity in tutorial.activities %}
+                <li>{{ activity }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <nav class="lesson-nav" aria-label="Tutorial navigation">
+            {% if previous_url %}
+            <a href="{{ previous_url }}">Previous Lesson</a>
+            {% else %}
+            <span>Previous Lesson</span>
+            {% endif %}
+
+            <a href="{{ url_for('backend.dashboard') }}">Return to Dashboard</a>
+
+            {% if next_url %}
+            <a href="{{ next_url }}">Next Lesson</a>
+            {% else %}
+            <span>Next Lesson</span>
+            {% endif %}
+        </nav>
+    </article>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/tutorial.js') }}"></script>
+{% endblock %}

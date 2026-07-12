@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/oscilloscope.css') }}?v=scope-simulation-switcher-1">
+{% endblock %}
+
+{% block content %}
+<section class="scope-hero">
+    <div>
+        <h1>Oscilloscope Lab</h1>
+        <p>
+            Practice signal viewing, probe connections, and oscilloscope measurement controls.
+        </p>
+    </div>
+    <nav class="page-link-group" aria-label="Oscilloscope lab navigation">
+        <a class="back-link" href="{{ url_for('tutorials.oscilloscope') }}">Tutorial</a>
+        <a class="back-link" href="{{ url_for('assessments.oscilloscope') }}">Assessment</a>
+        <a class="back-link" href="{{ url_for('backend.progress') }}#oscilloscope">Progress</a>
+        <label class="simulation-switcher">
+            <span>Switch Simulation</span>
+            <select aria-label="Switch simulation" onchange="if (this.value) window.location.href = this.value;">
+                <option value="/simulations/dmm">Digital Multimeter</option>
+                <option value="" selected disabled>Oscilloscope Lab (Current)</option>
+                <option value="/simulations/arduino">Arduino Lab</option>
+            </select>
+        </label>
+        <span class="module-status">Module Ready</span>
+    </nav>
+</section>
+
+<div class="scope-lab-grid" aria-label="Oscilloscope virtual laboratory">
+    <section class="scope-status-row" aria-label="Oscilloscope status summary">
+        <section class="scope-info-card probe-status-card">
+            <h2>Probe Status</h2>
+            <p id="probeStatusText">CH1 probe: not connected. Ground clip: not connected.</p>
+            <p id="probeFeedbackText">Connect CH1 probe to a signal source.</p>
+        </section>
+
+        <section class="measurement-readout-area scope-display-measurements" aria-label="Live measurement summary">
+            <h2>Measurement Panel</h2>
+            <div class="measurement-readout-grid">
+                <div class="measurement-tile context-tile"><span>Source</span><strong id="readoutSource">--</strong></div>
+                <div class="measurement-tile context-tile"><span>Waveform</span><strong id="readoutWaveform">Sine</strong></div>
+                <div class="measurement-tile primary-reading"><span>Frequency</span><strong id="readoutFrequency">--</strong></div>
+                <div class="measurement-tile primary-reading"><span>Amplitude</span><strong id="readoutAmplitude">--</strong></div>
+                <div class="measurement-tile primary-reading"><span>Period</span><strong id="readoutPeriod">--</strong></div>
+                <div class="measurement-tile primary-reading"><span>Peak-to-Peak</span><strong id="readoutVpp">--</strong></div>
+                <div class="measurement-tile scale-reading"><span>Volt/Div</span><strong id="readoutVoltDiv">1 V/div</strong></div>
+                <div class="measurement-tile scale-reading"><span>Time/Div</span><strong id="readoutTimeDiv">1 ms/div</strong></div>
+                <div class="measurement-tile scale-reading"><span>Noise Level</span><strong id="readoutNoiseLevel">--</strong></div>
+            </div>
+        </section>
+    </section>
+
+    <main class="scope-main-workbench" aria-label="Oscilloscope hands-on workspace">
+        <aside class="scope-sources-column" aria-label="Signal sources">
+            <section class="signal-source-panel">
+                <div class="source-heading">
+                    <h2>Signal Sources</h2>
+                    <p>Select a source to preview and connect.</p>
+                </div>
+
+                <div class="signal-source-tray" id="signalSourceTray">
+                    <button class="signal-source-card" type="button" data-source="Function Generator">
+                        <span class="source-icon generator-icon"></span>
+                        <strong>Function Generator</strong>
+                        <small>Sine, square, and triangle</small>
+                    </button>
+                    <button class="signal-source-card" type="button" data-source="AC Source">
+                        <span class="source-icon ac-icon"></span>
+                        <strong>AC Source</strong>
+                        <small>Low-voltage AC signal</small>
+                    </button>
+                    <button class="signal-source-card" type="button" data-source="PWM Generator">
+                        <span class="source-icon pwm-icon"></span>
+                        <strong>PWM Generator</strong>
+                        <small>Pulse-width signal</small>
+                    </button>
+                    <button class="signal-source-card" type="button" data-source="Sensor Signal">
+                        <span class="source-icon sensor-icon"></span>
+                        <strong>Sensor Signal</strong>
+                        <small>Changing analogue signal</small>
+                    </button>
+                    <button class="signal-source-card" type="button" data-source="Audio Signal">
+                        <span class="source-icon audio-icon"></span>
+                        <strong>Audio Signal</strong>
+                        <small>Audible waveform</small>
+                    </button>
+                    <button class="signal-source-card" type="button" data-source="Noisy Signal">
+                        <span class="source-icon noisy-icon"></span>
+                        <strong>Noisy Signal</strong>
+                        <small>Signal with interference</small>
+                    </button>
+                </div>
+            </section>
+        </aside>
+
+        <article class="scope-instrument" id="scopeInstrument" aria-label="Oscilloscope instrument panel">
+            <header class="scope-instrument-header">
+                <div>
+                    <span class="scope-brand">VTALP OSC-500</span>
+                    <strong>Digital Storage Oscilloscope</strong>
+                </div>
+                <button class="scope-power-button" id="scopePowerButton" type="button" aria-pressed="false">
+                    Power
+                </button>
+            </header>
+
+            <section class="scope-screen-section" aria-label="Large oscilloscope waveform display">
+                <div class="scope-screen-statusbar" aria-label="Oscilloscope screen status">
+                    <span><strong>Power</strong><em id="displayPowerStatus">Off</em></span>
+                    <span><strong>Source</strong><em id="displayActiveSource">--</em></span>
+                    <span><strong>CH1</strong><em id="displayCh1Status">Not Connected</em></span>
+                    <span><strong>Ground</strong><em id="displayGroundStatus">Not Connected</em></span>
+                    <span><strong>Trigger</strong><em id="displayTriggerStatus">Auto</em></span>
+                </div>
+                <div class="waveform-screen">
+                    <canvas id="scopeCanvas" width="1080" height="620" aria-label="Placeholder oscilloscope waveform"></canvas>
+                    <div class="screen-status" id="screenStatus">Placeholder waveform</div>
+                </div>
+                <p class="display-scale-status" id="displayScaleStatus">
+                    Time/Div: 1 ms/div | Volt/Div: 1 V/div
+                </p>
+            </section>
+        </article>
+
+        <aside class="scope-workspace-column" aria-label="Signal workspace">
+            <section class="source-workspace-card">
+                <h2>Signal Workspace</h2>
+                <div class="source-workspace" id="sourceWorkspace">
+                    <div class="auto-connection-lines" id="autoConnectionLines" aria-hidden="true">
+                        <span class="connection-line ch1-line"></span>
+                        <span class="connection-line ground-line"></span>
+                    </div>
+                    <span>Selected source</span>
+                    <strong id="selectedSourceName">No source selected</strong>
+                    <p id="selectedSourceDescription">Select a signal source from the Signal Sources panel to begin.</p>
+                    <div class="source-object-grid" aria-label="Selected connectable signal source">
+                        <div class="empty-source-workspace">Select a signal source from the Signal Sources panel to begin.</div>
+                    </div>
+                </div>
+            </section>
+        </aside>
+    </main>
+
+    <section class="scope-bottom-lab" aria-label="Oscilloscope connection controls and assistant">
+        <section class="scope-bottom-card probe-connection-area" aria-label="Probe connection area">
+            <div>
+                <h2>Probe Connection Area</h2>
+                <p>Connect CH1 to a signal output and ground to the matching reference.</p>
+            </div>
+            <div class="probe-port-row">
+                <span class="probe-port active" id="ch1InputPort">CH1</span>
+                <span class="probe-port" id="groundReferencePort">GND</span>
+                <span class="probe-port">EXT</span>
+            </div>
+            <div class="scope-probe-system" aria-label="CH1 probe and ground clip controls">
+                <div class="probe-visual-card">
+                    <div class="probe-cable">
+                        <span class="probe-handle ch1-probe"></span>
+                        <span class="probe-cable-line"></span>
+                        <span class="probe-tip-dot"></span>
+                    </div>
+                    <button class="probe-tool active" id="selectCh1Probe" type="button" data-probe="ch1" title="The signal probe carries the measured signal into channel 1." aria-label="Select CH1 signal probe tip. The signal probe carries the measured signal into channel 1.">
+                        CH1 Probe Tip <span class="tooltip-marker" aria-hidden="true">?</span>
+                    </button>
+                </div>
+                <div class="probe-visual-card">
+                    <div class="probe-cable ground-cable">
+                        <span class="probe-handle ground-probe"></span>
+                        <span class="probe-cable-line"></span>
+                        <span class="probe-tip-dot ground-dot"></span>
+                    </div>
+                    <button class="probe-tool" id="selectGroundProbe" type="button" data-probe="ground" title="The ground clip provides the reference point needed for voltage measurement." aria-label="Select ground clip. The ground clip provides the reference point needed for voltage measurement.">
+                        Ground Clip <span class="tooltip-marker" aria-hidden="true">?</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="scope-bottom-card signal-controls-card" aria-label="Signal controls">
+            <div class="signal-controls-heading">
+                <h2>Signal Controls</h2>
+                <button class="scope-reset-button" id="resetScopeButton" type="button">
+                    Reset
+                </button>
+            </div>
+            <div class="scope-control-bank" aria-label="Oscilloscope visual controls">
+                <label class="scope-control">
+                    Waveform Type
+                    <select id="waveformTypeControl">
+                        <option>Sine</option>
+                        <option>Square</option>
+                        <option>Triangle</option>
+                    </select>
+                </label>
+
+                <label class="scope-control">
+                    <span class="control-label-with-tip">Frequency <span class="tooltip-marker" tabindex="0" aria-label="Frequency controls how many waveform cycles occur every second." title="Frequency controls how many waveform cycles occur every second.">?</span></span>
+                    <input id="frequencyControl" type="range" min="1" max="100" value="5">
+                    <span id="frequencyValue">5 Hz</span>
+                </label>
+
+                <label class="scope-control">
+                    <span class="control-label-with-tip">Amplitude <span class="tooltip-marker" tabindex="0" aria-label="Amplitude controls waveform height, measured from the center line to the peak." title="Amplitude controls waveform height, measured from the center line to the peak.">?</span></span>
+                    <input id="amplitudeControl" type="range" min="1" max="5" step="0.1" value="2">
+                    <span id="amplitudeValue">2.0 V</span>
+                </label>
+
+                <label class="scope-control">
+                    <span class="control-label-with-tip">Time/Div <span class="tooltip-marker" tabindex="0" aria-label="Time per division controls the horizontal zoom of the waveform screen." title="Time per division controls the horizontal zoom of the waveform screen.">?</span></span>
+                    <select id="timeDivControl">
+                        <option>0.5 ms/div</option>
+                        <option>1 ms/div</option>
+                        <option>5 ms/div</option>
+                        <option>10 ms/div</option>
+                    </select>
+                </label>
+
+                <label class="scope-control">
+                    <span class="control-label-with-tip">Volt/Div <span class="tooltip-marker" tabindex="0" aria-label="Volts per division controls the vertical scale of the waveform screen." title="Volts per division controls the vertical scale of the waveform screen.">?</span></span>
+                    <select id="voltDivControl">
+                        <option>0.5 V/div</option>
+                        <option>1 V/div</option>
+                        <option>2 V/div</option>
+                        <option>5 V/div</option>
+                    </select>
+                </label>
+
+                <label class="scope-control duty-cycle-control" id="dutyCycleGroup">
+                    Duty Cycle
+                    <select id="dutyCycleControl">
+                        <option value="10">10%</option>
+                        <option value="20">20%</option>
+                        <option value="30">30%</option>
+                        <option value="40">40%</option>
+                        <option value="50" selected>50%</option>
+                        <option value="60">60%</option>
+                        <option value="70">70%</option>
+                        <option value="80">80%</option>
+                        <option value="90">90%</option>
+                    </select>
+                    <span id="dutyCycleValue">50%</span>
+                </label>
+
+                <div class="scope-control audio-control" id="audioControlGroup">
+                    <span>Signal Sound</span>
+                    <button class="audio-play-button" id="audioPlayButton" type="button">
+                        Play
+                    </button>
+                    <label>
+                        Volume
+                        <select id="audioVolumeControl">
+                            <option>Low</option>
+                            <option selected>Medium</option>
+                            <option>High</option>
+                        </select>
+                    </label>
+                    <span id="audioVolumeValue">Medium</span>
+                </div>
+
+                <label class="scope-control noise-level-control" id="noiseLevelGroup">
+                    Noise Level
+                    <select id="noiseLevelControl">
+                        <option>Low</option>
+                        <option selected>Medium</option>
+                        <option>High</option>
+                    </select>
+                    <span id="noiseLevelValue">Medium</span>
+                </label>
+            </div>
+        </section>
+
+        <section class="scope-bottom-card scope-learning-assistant" aria-label="Compact learning assistant">
+            <h2>Learning Assistant</h2>
+            <div class="assistant-summary">
+                <span>Current Step</span>
+                <strong id="currentStepText">Power on the oscilloscope.</strong>
+            </div>
+            <div class="assistant-summary">
+                <span>Selected Signal</span>
+                <p id="selectedSignalExplanation">No signal source selected.</p>
+            </div>
+            <div class="assistant-summary">
+                <span>Small Hint</span>
+                <p id="didYouKnowText">Choose a source, turn on the oscilloscope, then connect CH1 and ground.</p>
+            </div>
+        </section>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/oscilloscope.js') }}?v=scope-empty-source-1"></script>
+{% endblock %}

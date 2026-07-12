@@ -1,0 +1,102 @@
+.directory-main {
+    align-content: start;
+}
+
+.flow-strip {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.flow-strip article {
+    background: #ffffff;
+    border: 1px solid #d9e2ec;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.flow-strip article.active {
+    border-color: #7dd3fc;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.07);
+}
+
+.flow-strip span {
+    color: #0f766e;
+    display: block;
+    font-size: 0.76rem;
+    font-weight: 900;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.flow-strip strong {
+    color: #172033;
+}
+
+.directory-grid {
+    display: grid;
+    gap: 22px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.directory-card {
+    background: #ffffff;
+    border: 1px solid #d9e2ec;
+    border-radius: 8px;
+    display: grid;
+    gap: 20px;
+    grid-template-rows: auto 1fr auto;
+    min-height: 330px;
+    padding: 24px;
+}
+
+.directory-card h2 {
+    font-size: 1.28rem;
+    margin: 6px 0 10px;
+}
+
+.directory-card p {
+    color: #5d6b82;
+    margin: 0;
+}
+
+.directory-meta {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+}
+
+.directory-meta div {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px 12px;
+}
+
+.directory-meta dt {
+    color: #64748b;
+    font-size: 0.74rem;
+    font-weight: 900;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+}
+
+.directory-meta dd {
+    color: #172033;
+    font-weight: 800;
+    margin: 0;
+}
+
+@media (max-width: 1100px) {
+    .directory-grid,
+    .flow-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    .directory-grid,
+    .flow-strip {
+        grid-template-columns: 1fr;
+    }
+}

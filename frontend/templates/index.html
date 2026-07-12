@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <p class="eyebrow">Computer Science Final Year Project</p>
+        <h1>Virtual Technology Access and Learning Platform</h1>
+        <p class="hero-text">
+            Learn, practice, and assess technical instrument skills through web-based simulations.
+        </p>
+        <div class="hero-actions">
+            <a class="button primary" href="{{ url_for('simulations.simulation_home') }}">Start Simulation</a>
+            <a class="button secondary" href="{{ url_for('tutorials.tutorial_home') }}">View Tutorials</a>
+        </div>
+    </div>
+</section>
+
+<section class="features" aria-label="Platform features">
+    <article class="feature-card">
+        <h2>Interactive Simulations</h2>
+        <p>Practice with virtual versions of a Digital Multimeter, Oscilloscope, and Arduino Trainer.</p>
+    </article>
+    <article class="feature-card">
+        <h2>Guided Tutorials</h2>
+        <p>Follow structured lessons before attempting practical simulation activities.</p>
+    </article>
+    <article class="feature-card">
+        <h2>Assessments</h2>
+        <p>Take quizzes and practical tests to measure understanding and skill growth.</p>
+    </article>
+    <article class="feature-card">
+        <h2>Progress Tracking</h2>
+        <p>Monitor completed lessons, simulation practice, and assessment performance.</p>
+    </article>
+</section>
+{% endblock %}

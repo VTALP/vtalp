@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/instructor.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="instructor-hero">
+    <div>
+        <p class="eyebrow">Instructor Dashboard</p>
+        <h1>Class Learning Monitor</h1>
+        <p>Welcome, {{ full_name }}. Review learner progress, assessment performance, and recent activity across VTALP.</p>
+    </div>
+    <div class="instructor-actions">
+        <a href="{{ url_for('backend.dashboard') }}">Learner View</a>
+        <a href="{{ url_for('backend.logout') }}">Logout</a>
+    </div>
+</section>
+
+<main class="instructor-page">
+    <section class="instructor-stat-grid" aria-label="Dashboard statistics">
+        <article>
+            <span>Total Users</span>
+            <strong>{{ stats.total_users }}</strong>
+        </article>
+        <article>
+            <span>Total Tutorials Completed</span>
+            <strong>{{ stats.total_tutorials_completed }}</strong>
+        </article>
+        <article>
+            <span>Total Assessments Taken</span>
+            <strong>{{ stats.total_assessments_taken }}</strong>
+        </article>
+        <article>
+            <span>Average Score</span>
+            <strong>{{ stats.average_score }}%</strong>
+        </article>
+    </section>
+
+    <section class="performance-grid">
+        <article class="performance-card">
+            <p class="eyebrow">Performance Summary</p>
+            <h2>Class completion rate</h2>
+            <div class="completion-dial" style="--progress: {{ stats.completion_rate }}%">
+                <span>{{ stats.completion_rate }}%</span>
+            </div>
+            <p>Average device completion across tutorials, simulations, and assessments.</p>
+        </article>
+
+        <article class="performance-card">
+            <p class="eyebrow">Device Usage</p>
+            <h2>Most used device</h2>
+            <strong class="most-used-device">{{ stats.most_used_device }}</strong>
+            <p>This helps instructors identify which virtual lab receives the most learner attention.</p>
+        </article>
+    </section>
+
+    <section class="instructor-panel">
+        <div class="section-heading-row">
+            <div>
+                <p class="eyebrow">Student Progress</p>
+                <h2>Learner progress overview</h2>
+            </div>
+        </div>
+
+        <div class="student-table-wrap">
+            <table class="student-progress-table">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Email</th>
+                        <th>Tutorials Completed</th>
+                        <th>Simulations Used</th>
+                        <th>Assessment Scores</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.email }}</td>
+                        <td>{{ student.tutorials_completed }}</td>
+                        <td>{{ student.simulations_used }}</td>
+                        <td>{{ student.latest_score }} / Avg {{ student.assessment_average }}%</td>
+                        <td>{{ student.role|title }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="instructor-panel">
+        <div class="section-heading-row">
+            <div>
+                <p class="eyebrow">Student Activity Log</p>
+                <h2>Recent learner activity</h2>
+            </div>
+        </div>
+
+        {% if activity_log %}
+        <ul class="instructor-activity-log">
+            {% for activity in activity_log %}
+            <li>
+                <span class="activity-dot"></span>
+                <div>
+                    <strong>{{ activity.type }}</strong>
+                    <p>{{ activity.student }} - {{ activity.detail }}</p>
+                    <small>{{ activity.timestamp }}</small>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <div class="empty-instructor-state">
+            <strong>No activity recorded yet</strong>
+            <p>Login activity, tutorial completions, and assessment attempts will appear here.</p>
+        </div>
+        {% endif %}
+    </section>
+</main>
+{% endblock %}

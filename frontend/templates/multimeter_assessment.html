@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/assessment.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="assessment-hero">
+    <div>
+        <p class="eyebrow">Knowledge Check</p>
+        <h1>Digital Multimeter Assessment</h1>
+        <p>Answer five questions covering voltage, resistance, continuity, probe placement, and safety.</p>
+    </div>
+    <div class="page-link-group">
+        <a class="back-link" href="{{ url_for('backend.dashboard') }}">Back to Dashboard</a>
+        <a class="back-link" href="{{ url_for('tutorials.multimeter') }}">Go to Tutorial</a>
+        <a class="back-link" href="{{ url_for('simulations.multimeter') }}">Go to Simulation</a>
+    </div>
+</section>
+
+<section class="assessment-layout" data-assessment="multimeter" aria-label="Digital Multimeter assessment">
+    <aside class="assessment-status">
+        <h2>Assessment Result</h2>
+        <div id="assessmentResultData" hidden data-device="multimeter" data-score="0" data-total="5" data-passed="false"></div>
+        <p class="score-display" id="scoreDisplay">Score: 0 / 5</p>
+        <p class="pass-message" id="passMessage">Submit your answers to see your result.</p>
+        <button class="retake-button" type="button" id="retakeButton">Retake Assessment</button>
+        <a class="dashboard-button" href="{{ url_for('backend.dashboard') }}">Return to Dashboard</a>
+    </aside>
+
+    <form class="assessment-form" id="assessmentForm">
+        <fieldset data-answer="dcv">
+            <legend>1. Which mode should be used to measure a 9V battery?</legend>
+            <label><input type="radio" name="q1" value="continuity"> Continuity mode</label>
+            <label><input type="radio" name="q1" value="dcv"> DC Voltage mode</label>
+            <label><input type="radio" name="q1" value="resistance"> Resistance mode</label>
+        </fieldset>
+
+        <fieldset data-answer="unpowered">
+            <legend>2. When should resistance be measured?</legend>
+            <label><input type="radio" name="q2" value="powered"> While the source is powered</label>
+            <label><input type="radio" name="q2" value="unpowered"> Only when the circuit is unpowered</label>
+            <label><input type="radio" name="q2" value="same"> With both probes on the same point</label>
+        </fieldset>
+
+        <fieldset data-answer="closed">
+            <legend>3. What does continuity indicate?</legend>
+            <label><input type="radio" name="q3" value="closed"> A complete electrical path</label>
+            <label><input type="radio" name="q3" value="battery"> A 9V battery is present</label>
+            <label><input type="radio" name="q3" value="resistor"> A resistor is always 220 ohms</label>
+        </fieldset>
+
+        <fieldset data-answer="com">
+            <legend>4. Where should the black probe usually be connected?</legend>
+            <label><input type="radio" name="q4" value="red"> Red voltage port</label>
+            <label><input type="radio" name="q4" value="com"> COM port</label>
+            <label><input type="radio" name="q4" value="screen"> Display screen</label>
+        </fieldset>
+
+        <fieldset data-answer="stop">
+            <legend>5. What should you do if the meter shows an unexpected error?</legend>
+            <label><input type="radio" name="q5" value="ignore"> Ignore it and continue</label>
+            <label><input type="radio" name="q5" value="stop"> Stop and check mode, probes, and circuit power</label>
+            <label><input type="radio" name="q5" value="short"> Touch both probes together on the battery</label>
+        </fieldset>
+
+        <button class="submit-button" type="submit">Submit Assessment</button>
+        <div class="feedback-panel" id="feedbackPanel" aria-live="polite"></div>
+    </form>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/assessment.js') }}"></script>
+{% endblock %}

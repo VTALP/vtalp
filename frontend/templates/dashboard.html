@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-shell">
+    {% include "_dashboard_sidebar.html" %}
+
+    <section class="dashboard-main">
+        <header class="dashboard-topbar">
+            <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-controls="dashboardSidebar" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div>
+                <p class="dashboard-kicker">Dashboard</p>
+                <h1>Welcome back, {{ full_name }}.</h1>
+                <p class="dashboard-subtitle">Choose a module and continue learning at your own pace.</p>
+            </div>
+        </header>
+
+        <section class="overview-panel" aria-label="Dashboard overview">
+            <div>
+                <p class="dashboard-kicker">Overall Progress Summary</p>
+                <h2>{{ overall_completion }}% complete</h2>
+                <p>Detailed analytics, milestones, and recent learning events are available on the Progress page.</p>
+            </div>
+            <div class="completion-ring large-ring" style="--progress: {{ overall_completion }}%" aria-label="Overall completion {{ overall_completion }} percent">
+                <span>{{ overall_completion }}%</span>
+            </div>
+        </section>
+
+        <section class="learning-flow-panel" aria-label="Recommended learning flow">
+            <div class="section-title-row">
+                <div>
+                    <p class="dashboard-kicker">Recommended Flow</p>
+                    <h2>Learn in this order</h2>
+                </div>
+            </div>
+            <div class="learning-flow-grid">
+                <a href="{{ url_for('tutorials.tutorial_home') }}">
+                    <span>Step 1</span>
+                    <strong>Start with Tutorial</strong>
+                    <p>Learn the device, safety rules, controls, and beginner concepts.</p>
+                </a>
+                <a href="{{ url_for('simulations.simulation_home') }}">
+                    <span>Step 2</span>
+                    <strong>Practice in Simulation</strong>
+                    <p>Use the virtual lab after reviewing the tutorial.</p>
+                </a>
+                <a href="{{ url_for('assessments.assessment_home') }}">
+                    <span>Step 3</span>
+                    <strong>Take Assessment</strong>
+                    <p>Check understanding after guided practice.</p>
+                </a>
+                <a href="{{ url_for('backend.progress') }}">
+                    <span>Step 4</span>
+                    <strong>Check Progress</strong>
+                    <p>Review analytics, milestones, and recent learning activity.</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="dashboard-section-block">
+            <div class="section-title-row">
+                <div>
+                    <p class="dashboard-kicker">Learning Modules</p>
+                    <h2>Choose a VTALP device</h2>
+                </div>
+            </div>
+
+            <div class="instrument-grid">
+                {% for device in dashboard_devices %}
+                <article class="instrument-card">
+                    <div class="instrument-card-top">
+                        <div>
+                            <span class="device-category">{{ device.category }}</span>
+                            <h3>{{ device.name }}</h3>
+                        </div>
+                        <div class="completion-ring small-ring" style="--progress: {{ device.completion_percentage }}%" aria-label="{{ device.name }} completion {{ device.completion_percentage }} percent">
+                            <span>{{ device.completion_percentage }}%</span>
+                        </div>
+                    </div>
+                    <div class="instrument-content">
+                        <p>{{ device.description }}</p>
+                        <strong>{{ device.completion_percentage }}% overall progress</strong>
+                    </div>
+                    <div class="instrument-actions">
+                        <a class="dash-button primary-action" href="{{ device.simulation_url }}">{% if device.slug == 'arduino' %}Open Lab{% else %}Open Simulation{% endif %}</a>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="continue-learning" aria-label="Continue learning">
+            <p>Need tutorials, assessments, or detailed analytics? Use the sidebar to open the full learning areas.</p>
+            <a class="dash-button secondary-action" href="{{ url_for('backend.progress') }}">View Progress Details</a>
+        </section>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

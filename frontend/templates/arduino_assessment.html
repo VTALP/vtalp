@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/assessment.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="assessment-hero">
+    <div>
+        <p class="eyebrow">Knowledge Check</p>
+        <h1>Arduino Trainer Assessment</h1>
+        <p>Answer twelve questions based on the upgraded Arduino Lab, including USB upload, code, digital and analog input, sensors, and guided simulations.</p>
+    </div>
+    <div class="page-link-group">
+        <a class="back-link" href="{{ url_for('backend.dashboard') }}">Back to Dashboard</a>
+        <a class="back-link" href="{{ url_for('tutorials.arduino') }}">Go to Tutorial</a>
+        <a class="back-link" href="{{ url_for('simulations.arduino') }}">Go to Simulation</a>
+    </div>
+</section>
+
+<section class="assessment-layout" data-assessment="arduino" data-passing-score="8" aria-label="Arduino Trainer assessment">
+    <aside class="assessment-status">
+        <h2>Assessment Result</h2>
+        <div id="assessmentResultData" hidden data-device="arduino" data-score="0" data-total="12" data-passed="false"></div>
+        <p class="score-display" id="scoreDisplay">Score: 0 / 12</p>
+        <p class="pass-message" id="passMessage">Submit your answers to see your result.</p>
+        <button class="retake-button" type="button" id="retakeButton">Retake Assessment</button>
+        <a class="dashboard-button" href="{{ url_for('backend.dashboard') }}">Back to Dashboard</a>
+    </aside>
+
+    <form class="assessment-form" id="assessmentForm">
+        <fieldset data-answer="controller">
+            <legend>1. What is the main purpose of the Arduino Uno in the VTALP lab?</legend>
+            <label><input type="radio" name="q1" value="controller"> To run uploaded code, read inputs, and control outputs</label>
+            <label><input type="radio" name="q1" value="display"> To display oscilloscope waveforms only</label>
+            <label><input type="radio" name="q1" value="battery"> To work only as a battery</label>
+            <label><input type="radio" name="q1" value="resistor"> To replace all resistors in a circuit</label>
+        </fieldset>
+
+        <fieldset data-answer="usbUpload">
+            <legend>2. Why must USB be connected before uploading code?</legend>
+            <label><input type="radio" name="q2" value="audio"> USB makes the buzzer louder</label>
+            <label><input type="radio" name="q2" value="usbUpload"> USB provides the programming link between the computer and Arduino</label>
+            <label><input type="radio" name="q2" value="temperature"> USB measures temperature directly</label>
+            <label><input type="radio" name="q2" value="servo"> USB changes the servo angle automatically</label>
+        </fieldset>
+
+        <fieldset data-answer="highOutput">
+            <legend>3. In the Blink LED simulation, what does digitalWrite(13, HIGH) do?</legend>
+            <label><input type="radio" name="q3" value="readAnalog"> Reads analog voltage from D13</label>
+            <label><input type="radio" name="q3" value="highOutput"> Outputs about 5V on D13 so the LED can turn ON</label>
+            <label><input type="radio" name="q3" value="serialPrint"> Prints distance to the Serial Monitor</label>
+            <label><input type="radio" name="q3" value="ground"> Connects D13 to GND permanently</label>
+        </fieldset>
+
+        <fieldset data-answer="buttonInput">
+            <legend>4. A push button is used as which type of Arduino signal?</legend>
+            <label><input type="radio" name="q4" value="pwmOutput"> PWM output</label>
+            <label><input type="radio" name="q4" value="buttonInput"> Digital input</label>
+            <label><input type="radio" name="q4" value="acSignal"> AC mains input</label>
+            <label><input type="radio" name="q4" value="analogOnly"> Analog output only</label>
+        </fieldset>
+
+        <fieldset data-answer="zeroTo1023">
+            <legend>5. What range does analogRead() produce for potentiometers and analog sensors?</legend>
+            <label><input type="radio" name="q5" value="zeroToOne"> 0 to 1</label>
+            <label><input type="radio" name="q5" value="zeroTo255"> 0 to 255</label>
+            <label><input type="radio" name="q5" value="zeroTo1023"> 0 to 1023</label>
+            <label><input type="radio" name="q5" value="zeroTo230"> 0 to 230</label>
+        </fieldset>
+
+        <fieldset data-answer="pwmControl">
+            <legend>6. What does PWM help Arduino control?</legend>
+            <label><input type="radio" name="q6" value="database"> User passwords in SQLite</label>
+            <label><input type="radio" name="q6" value="pwmControl"> Gradual output behavior such as servo position or LED brightness</label>
+            <label><input type="radio" name="q6" value="groundOnly"> Ground pins only</label>
+            <label><input type="radio" name="q6" value="usbCable"> The USB cable shape</label>
+        </fieldset>
+
+        <fieldset data-answer="resistorLimitsCurrent">
+            <legend>7. Why is a resistor included in a basic LED circuit?</legend>
+            <label><input type="radio" name="q7" value="resistorLimitsCurrent"> To limit current and protect the LED</label>
+            <label><input type="radio" name="q7" value="increaseVoltage"> To increase Arduino voltage to 230V</label>
+            <label><input type="radio" name="q7" value="readButton"> To read the button state</label>
+            <label><input type="radio" name="q7" value="storeCode"> To store uploaded code</label>
+        </fieldset>
+
+        <fieldset data-answer="pressedLow">
+            <legend>8. With INPUT_PULLUP, what happens when the push button is pressed?</legend>
+            <label><input type="radio" name="q8" value="pressedHigh"> D2 reads HIGH</label>
+            <label><input type="radio" name="q8" value="pressedLow"> D2 reads LOW</label>
+            <label><input type="radio" name="q8" value="analog1023"> A0 reads 1023</label>
+            <label><input type="radio" name="q8" value="servo180"> The servo moves to 180 degrees</label>
+        </fieldset>
+
+        <fieldset data-answer="d9">
+            <legend>9. Which pin is used for the Servo Sweep signal in the Arduino Lab?</legend>
+            <label><input type="radio" name="q9" value="d2"> D2</label>
+            <label><input type="radio" name="q9" value="d7"> D7</label>
+            <label><input type="radio" name="q9" value="d9"> D9</label>
+            <label><input type="radio" name="q9" value="a2"> A2</label>
+        </fieldset>
+
+        <fieldset data-answer="serialOutput">
+            <legend>10. What is the Serial Monitor used for in these Arduino simulations?</legend>
+            <label><input type="radio" name="q10" value="drawBoard"> Drawing the Arduino board</label>
+            <label><input type="radio" name="q10" value="serialOutput"> Displaying values printed by the uploaded sketch</label>
+            <label><input type="radio" name="q10" value="connectUsb"> Physically connecting USB</label>
+            <label><input type="radio" name="q10" value="createAccount"> Registering new users</label>
+        </fieldset>
+
+        <fieldset data-answer="environmentValues">
+            <legend>11. What do sensors such as LDR and temperature sensor provide to Arduino?</legend>
+            <label><input type="radio" name="q11" value="fixedText"> Fixed text labels only</label>
+            <label><input type="radio" name="q11" value="environmentValues"> Readings from real-world conditions such as light or heat</label>
+            <label><input type="radio" name="q11" value="onlyDigitalLow"> Only LOW signals forever</label>
+            <label><input type="radio" name="q11" value="servoPower"> Servo power only</label>
+        </fieldset>
+
+        <fieldset data-answer="trigD7EchoD6">
+            <legend>12. Which pins are used by the ultrasonic sensor in the VTALP Arduino Lab?</legend>
+            <label><input type="radio" name="q12" value="trigD7EchoD6"> TRIG on D7 and ECHO on D6</label>
+            <label><input type="radio" name="q12" value="servoD9Only"> Signal on D9 only</label>
+            <label><input type="radio" name="q12" value="a0A1"> A0 and A1</label>
+            <label><input type="radio" name="q12" value="d13Gnd"> D13 and GND only</label>
+        </fieldset>
+
+        <button class="submit-button" type="submit">Submit Assessment</button>
+        <div class="feedback-panel" id="feedbackPanel" aria-live="polite"></div>
+    </form>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/assessment.js') }}"></script>
+{% endblock %}

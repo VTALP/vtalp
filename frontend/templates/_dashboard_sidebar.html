@@ -1,0 +1,15 @@
+<aside class="dashboard-sidebar" id="dashboardSidebar" aria-label="Dashboard navigation">
+    <a class="sidebar-brand" href="{{ url_for('backend.dashboard') }}">
+        <span class="brand-mark">V</span>
+        <span>VTALP</span>
+    </a>
+
+    <nav class="sidebar-nav">
+        <a class="{% if request.endpoint == 'backend.dashboard' %}active{% endif %}" href="{{ url_for('backend.dashboard') }}">Dashboard</a>
+        <a class="{% if request.blueprint == 'simulations' %}active{% endif %}" href="{{ url_for('simulations.simulation_home') }}">Simulations</a>
+        <a class="{% if request.blueprint == 'tutorials' %}active{% endif %}" href="{{ url_for('tutorials.tutorial_home') }}">Tutorials</a>
+        <a class="{% if request.blueprint == 'assessments' %}active{% endif %}" href="{{ url_for('assessments.assessment_home') }}">Assessments</a>
+        <a class="{% if request.endpoint == 'backend.progress' %}active{% endif %}" href="{{ url_for('backend.progress') }}">Progress</a>
+        <a href="{{ url_for('backend.logout') }}">Logout</a>
+    </nav>
+</aside>

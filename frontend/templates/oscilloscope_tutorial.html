@@ -1,0 +1,350 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tutorial.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="tutorial-hero">
+    <div>
+        <p class="eyebrow">Device Tutorial</p>
+        <h1>Oscilloscope Tutorial</h1>
+        <p>Learn how an oscilloscope displays waveforms and signal measurements before opening the virtual instrument.</p>
+    </div>
+    <div class="page-link-group">
+        <a class="back-link" href="{{ url_for('backend.dashboard') }}">Back to Dashboard</a>
+        <a class="back-link" href="{{ url_for('simulations.oscilloscope') }}">Go to Simulation</a>
+        <a class="back-link" href="{{ url_for('assessments.oscilloscope') }}">Take Assessment</a>
+    </div>
+</section>
+
+<section class="tutorial-layout" data-tutorial="oscilloscope" data-simulation-url="{{ url_for('simulations.oscilloscope') }}" aria-label="Oscilloscope tutorial">
+    <aside class="tutorial-progress-card">
+        <h2>Tutorial Progress</h2>
+        <div id="tutorialProgressData" hidden data-device="oscilloscope" data-completed="false" data-percent="0"></div>
+        <div class="progress-meter"><div class="progress-fill" id="progressFill"></div></div>
+        <p><strong id="progressPercent">0%</strong> completed</p>
+        <div class="badge-row">
+            <span class="badge" id="lessonBadge">Lesson In Progress</span>
+            <span class="badge" id="tutorialBadge">Tutorial In Progress</span>
+        </div>
+        <section class="learning-path-card" aria-label="Oscilloscope guided learning path">
+            <div class="learning-path-heading">
+                <h3>Guided Learning Path</h3>
+                <span id="pathProgressText">0 of 5 steps complete</span>
+            </div>
+            <ol class="learning-path-list">
+                <li><button type="button" class="path-step" data-step="1" data-target=".anatomy-card"><span class="step-marker">1</span><span>Learn Device Components</span></button></li>
+                <li><button type="button" class="path-step" data-step="2" data-target="#waveforms"><span class="step-marker">2</span><span>Understand Waveforms</span></button></li>
+                <li><button type="button" class="path-step" data-step="3" data-target="#frequency"><span class="step-marker">3</span><span>Learn Frequency</span></button></li>
+                <li><button type="button" class="path-step" data-step="4" data-target="#amplitude"><span class="step-marker">4</span><span>Learn Amplitude</span></button></li>
+                <li><button type="button" class="path-step" data-step="5" data-target="simulation"><span class="step-marker">5</span><span>Open Simulation</span></button></li>
+            </ol>
+            <div class="next-step-box">
+                <span>Next Step</span>
+                <strong id="nextStepText">Learn Device Components</strong>
+            </div>
+            <button class="continue-learning-button" type="button" id="continueLearningButton">Continue Learning</button>
+        </section>
+        <button class="complete-button" type="button" id="markCompleteButton">Mark Tutorial as Complete</button>
+        <a class="complete-button secondary-link" href="{{ url_for('backend.dashboard') }}">Return to Dashboard</a>
+    </aside>
+
+    <article class="tutorial-content">
+        <section class="tutorial-card">
+            <h2>Learning Objectives</h2>
+            <ul class="check-list">
+                <li>Identify the waveform screen and control indicators.</li>
+                <li>Explain frequency, amplitude, period, Time/Div, and Volt/Div.</li>
+                <li>Compare sine, square, and triangle waves.</li>
+                <li>Use oscilloscope readings to describe a signal.</li>
+            </ul>
+        </section>
+
+        <section class="tutorial-card">
+            <h2>Introduction</h2>
+            <p>An oscilloscope is a signal viewing instrument. It shows how voltage changes over time, making it useful for electronics testing and signal analysis.</p>
+        </section>
+
+        <section class="diagram-card anatomy-card" data-diagram="oscilloscope">
+            <div class="anatomy-heading">
+                <h2>Explore the Device</h2>
+                <p>Inspect the oscilloscope before entering the simulation. Select a hotspot to study its function, real-world usage, and beginner tip.</p>
+            </div>
+            <div class="anatomy-layout">
+                <div class="anatomy-device scope-anatomy" aria-label="Interactive oscilloscope anatomy diagram">
+                    <div class="scope-shell" aria-hidden="true">
+                        <div class="scope-screen">
+                            <div class="scope-waveform"></div>
+                            <span class="scope-grid-label top-label">CH1</span>
+                            <span class="scope-grid-label bottom-label">Time/Div</span>
+                        </div>
+                        <div class="scope-panel">
+                            <span class="scope-power"></span>
+                            <span class="scope-knob large"></span>
+                            <span class="scope-knob"></span>
+                            <span class="scope-selector"></span>
+                            <div class="scope-measure-box">Hz Vpp</div>
+                        </div>
+                    </div>
+                    <button class="anatomy-hotspot" type="button" style="--x: 32%; --y: 24%;" data-title="Display Screen" data-purpose="Shows voltage changes over time." data-usage="Used in laboratories to observe the shape, height, and timing of electronic signals." data-tip="Read the screen from left to right as time passing.">Display Screen</button>
+                    <button class="anatomy-hotspot" type="button" style="--x: 32%; --y: 44%;" data-title="Waveform Area" data-purpose="Displays the trace that represents the signal path." data-usage="Used to compare sine, square, and triangle wave behavior." data-tip="The taller the trace, the larger the signal amplitude.">Waveform Area</button>
+                    <button class="anatomy-hotspot" type="button" style="--x: 70%; --y: 21%;" data-title="Power Button" data-purpose="Turns the oscilloscope display and controls on or off." data-usage="Used before any signal can be viewed or measured." data-tip="If nothing responds, check power before changing other settings.">Power Button</button>
+                    <button class="anatomy-hotspot" type="button" style="--x: 80%; --y: 41%;" data-title="Frequency Control" data-purpose="Changes how many waveform cycles occur each second." data-usage="Used to study slow and fast repeating signals." data-tip="Higher frequency means the waves appear closer together.">Frequency Control</button>
+                    <button class="anatomy-hotspot" type="button" style="--x: 68%; --y: 56%;" data-title="Amplitude Control" data-purpose="Changes the signal height measured in volts." data-usage="Used to inspect whether a signal is weak, strong, or within a safe range." data-tip="Amplitude is about height; frequency is about spacing.">Amplitude Control</button>
+                    <button class="anatomy-hotspot" type="button" style="--x: 82%; --y: 69%;" data-title="Waveform Selector" data-purpose="Chooses the signal shape shown on the display." data-usage="Used to compare different signal types in testing and training." data-tip="Start with sine waves, then compare square and triangle waves.">Waveform Selector</button>
+                    <button class="anatomy-hotspot" type="button" style="--x: 67%; --y: 79%;" data-title="Measurement Panel" data-purpose="Summarizes values such as frequency, amplitude, period, and Vpp." data-usage="Used to confirm numerical readings after adjusting the controls." data-tip="Use the measurement panel to check your calculation.">Measurement Panel</button>
+                </div>
+                <aside class="anatomy-info" aria-live="polite">
+                    <span class="anatomy-eyebrow">Explore the Device</span>
+                    <h3 data-anatomy-title>Hover over a component</h3>
+                    <p data-anatomy-purpose><strong>Function:</strong> Select a label on the diagram to identify the part and its role.</p>
+                    <p data-anatomy-usage><strong>Real-world usage:</strong> Each explanation links a control to signal analysis practice.</p>
+                    <p data-anatomy-tip><strong>Beginner tip:</strong> Use the hotspot labels to connect controls with waveform changes.</p>
+                </aside>
+            </div>
+        </section>
+
+        <section class="tutorial-card" id="waveforms">
+            <h2>Device Parts and Functions</h2>
+            <ul class="activity-list">
+                <li><strong>Screen grid:</strong> Displays voltage vertically and time horizontally.</li>
+                <li><strong>CH1:</strong> Shows the active input channel.</li>
+                <li><strong>Time/Div:</strong> Sets the time scale across the screen.</li>
+                <li><strong>Volt/Div:</strong> Sets the vertical voltage scale.</li>
+            </ul>
+        </section>
+
+        <section class="tutorial-card">
+            <h2>Lesson Sections</h2>
+            <div class="lesson-block"><h3>What is an Oscilloscope?</h3><p>It is a laboratory instrument for observing changing electrical signals.</p></div>
+            <div class="lesson-block"><h3>Waveforms</h3><p>Sine, square, and triangle waves show different signal shapes.</p></div>
+            <div class="lesson-block"><h3>Frequency</h3><p>Frequency is the number of cycles per second, measured in hertz.</p></div>
+            <div class="lesson-block"><h3>Amplitude</h3><p>Amplitude is the signal height from the centre line to the peak.</p></div>
+            <div class="lesson-block"><h3>Period</h3><p>Period is the time for one complete cycle.</p></div>
+            <div class="lesson-block"><h3>Time/Div and Volt/Div</h3><p>These controls scale the signal horizontally and vertically.</p></div>
+        </section>
+
+        <section class="tutorial-card">
+            <h2>Frequency Explanation</h2>
+            <p>Frequency describes how many waveform cycles occur every second. Higher frequency means more cycles fit across the screen, so the waveform appears closer together horizontally.</p>
+        </section>
+
+        <section class="tutorial-card">
+            <h2>Amplitude Explanation</h2>
+            <p>Amplitude describes the signal height from the centre reference line to the peak. Increasing amplitude makes the trace taller on the display.</p>
+        </section>
+
+        <section class="tutorial-card">
+            <h2>Time/Div Explanation</h2>
+            <p>Time/Div controls how much time each horizontal grid division represents. Smaller Time/Div values zoom in on fast changes, while larger values show more time across the screen.</p>
+        </section>
+
+        <section class="tutorial-card">
+            <h2>Volt/Div Explanation</h2>
+            <p>Volt/Div controls how much voltage each vertical grid division represents. It helps scale the waveform so the trace is visible without being too small or clipped.</p>
+        </section>
+
+        <section class="tutorial-card">
+            <h2>Clean Signal vs Noisy Signal</h2>
+            <p><strong>Clean Signal:</strong> A smooth and stable trace that is easy to measure.</p>
+            <p><strong>Noisy Signal:</strong> A rough or unstable trace caused by unwanted interference added to the real signal.</p>
+        </section>
+
+        <section class="tutorial-card">
+            <h2>Did You Know?</h2>
+            <ul class="activity-list">
+                <li>A function generator creates test signals so engineers can check circuit behavior safely.</li>
+                <li>PWM signals are commonly used for LED dimming and motor speed control.</li>
+                <li>Audio can be represented as an electrical waveform, which is why oscilloscopes can display sound signals.</li>
+                <li>Electrical noise can affect measurements, communication systems, and sensor readings.</li>
+            </ul>
+        </section>
+
+        <section class="tutorial-card" id="frequency">
+            <h2>Step-by-Step Usage Guide</h2>
+            <ol class="step-list">
+                <li>Turn on the oscilloscope.</li>
+                <li>Select a waveform or signal source.</li>
+                <li>Adjust frequency and observe cycle spacing.</li>
+                <li>Adjust amplitude and observe signal height.</li>
+                <li>Read frequency, period, amplitude, and Vpp values.</li>
+            </ol>
+        </section>
+
+        <section class="tutorial-card" id="amplitude">
+            <h2>Common Mistakes</h2>
+            <ul class="activity-list">
+                <li>Confusing amplitude with peak-to-peak voltage.</li>
+                <li>Ignoring Time/Div when counting waveform cycles.</li>
+                <li>Trying to compare signals without checking the scale.</li>
+                <li>Forgetting to connect a probe before reading the trace.</li>
+                <li>Assuming a signal is absent before checking power and trigger status.</li>
+            </ul>
+        </section>
+
+        <section class="tutorial-card">
+            <h2>Safety and Best Practice Tips</h2>
+            <ul class="activity-list">
+                <li>Start with a clear signal and simple waveform.</li>
+                <li>Check Time/Div and Volt/Div before interpreting values.</li>
+                <li>Use trigger status to stabilize repeating signals.</li>
+                <li>Use safe low-voltage signals during beginner practice.</li>
+                <li>Keep probe ground leads connected correctly.</li>
+                <li>Do not probe high-voltage circuits without supervision.</li>
+            </ul>
+        </section>
+
+        <section class="tutorial-card exercise-card" id="tutorialExercises" data-exercise-device="oscilloscope">
+            <div class="exercise-heading">
+                <div>
+                    <h2>Exercises</h2>
+                    <p>Open the oscilloscope simulation, observe each signal behavior, return here, and choose the correct answer.</p>
+                </div>
+                <div class="exercise-progress" aria-label="Tutorial exercise progress">
+                    <strong id="exerciseProgressText">0/8 complete</strong>
+                    <span id="exerciseProgressPercent">0%</span>
+                </div>
+            </div>
+            <div class="exercise-progress-bar">
+                <span id="exerciseProgressFill"></span>
+            </div>
+            <p class="exercise-completion-badge" id="exerciseCompletionBadge">Practice activities in progress</p>
+
+            <div class="exercise-list">
+                <article class="exercise-item" data-exercise-id="function-generator-waveforms" data-correct-answer="Square Wave">
+                    <div class="exercise-title-row">
+                        <h3>Exercise 1: Function Generator Waveforms</h3>
+                        <a class="exercise-sim-link" href="{{ url_for('simulations.oscilloscope') }}">Open Oscilloscope Simulation</a>
+                    </div>
+                    <p>Open the oscilloscope simulation, connect to Function Generator, test Sine, Square, and Triangle waves.</p>
+                    <p><strong>Question:</strong> Which waveform has sharp high and low levels?</p>
+                    <div class="exercise-options" role="group" aria-label="Exercise 1 answer options">
+                        <button type="button" data-answer="Sine Wave">Sine Wave</button>
+                        <button type="button" data-answer="Square Wave">Square Wave</button>
+                        <button type="button" data-answer="Triangle Wave">Triangle Wave</button>
+                        <button type="button" data-answer="Sensor Wave">Sensor Wave</button>
+                    </div>
+                    <p class="exercise-feedback" aria-live="polite">Select an answer after trying the simulation.</p>
+                </article>
+
+                <article class="exercise-item" data-exercise-id="frequency-change" data-correct-answer="More cycles appear closer together.">
+                    <div class="exercise-title-row">
+                        <h3>Exercise 2: Frequency Change</h3>
+                        <a class="exercise-sim-link" href="{{ url_for('simulations.oscilloscope') }}">Open Oscilloscope Simulation</a>
+                    </div>
+                    <p>Open the simulation, increase frequency on the Function Generator, then observe the screen.</p>
+                    <p><strong>Question:</strong> What happens when frequency increases?</p>
+                    <div class="exercise-options" role="group" aria-label="Exercise 2 answer options">
+                        <button type="button" data-answer="The waveform becomes taller.">The waveform becomes taller.</button>
+                        <button type="button" data-answer="More cycles appear closer together.">More cycles appear closer together.</button>
+                        <button type="button" data-answer="The signal changes to DC.">The signal changes to DC.</button>
+                        <button type="button" data-answer="The screen turns off.">The screen turns off.</button>
+                    </div>
+                    <p class="exercise-feedback" aria-live="polite">Select an answer after trying the simulation.</p>
+                </article>
+
+                <article class="exercise-item" data-exercise-id="amplitude-change" data-correct-answer="The waveform becomes taller.">
+                    <div class="exercise-title-row">
+                        <h3>Exercise 3: Amplitude Change</h3>
+                        <a class="exercise-sim-link" href="{{ url_for('simulations.oscilloscope') }}">Open Oscilloscope Simulation</a>
+                    </div>
+                    <p>Increase amplitude and observe the wave height.</p>
+                    <p><strong>Question:</strong> What happens when amplitude increases?</p>
+                    <div class="exercise-options" role="group" aria-label="Exercise 3 answer options">
+                        <button type="button" data-answer="The waveform becomes taller.">The waveform becomes taller.</button>
+                        <button type="button" data-answer="More cycles appear closer together.">More cycles appear closer together.</button>
+                        <button type="button" data-answer="The waveform becomes silent.">The waveform becomes silent.</button>
+                        <button type="button" data-answer="The duty cycle becomes 50%.">The duty cycle becomes 50%.</button>
+                    </div>
+                    <p class="exercise-feedback" aria-live="polite">Select an answer after trying the simulation.</p>
+                </article>
+
+                <article class="exercise-item" data-exercise-id="ac-source" data-correct-answer="50 Hz">
+                    <div class="exercise-title-row">
+                        <h3>Exercise 4: AC Source</h3>
+                        <a class="exercise-sim-link" href="{{ url_for('simulations.oscilloscope') }}">Open Oscilloscope Simulation</a>
+                    </div>
+                    <p>Connect to the AC Source.</p>
+                    <p><strong>Question:</strong> What frequency does the AC Source show?</p>
+                    <div class="exercise-options" role="group" aria-label="Exercise 4 answer options">
+                        <button type="button" data-answer="5 Hz">5 Hz</button>
+                        <button type="button" data-answer="50 Hz">50 Hz</button>
+                        <button type="button" data-answer="1000 Hz">1000 Hz</button>
+                        <button type="button" data-answer="0 Hz">0 Hz</button>
+                    </div>
+                    <p class="exercise-feedback" aria-live="polite">Select an answer after trying the simulation.</p>
+                </article>
+
+                <article class="exercise-item" data-exercise-id="pwm-generator" data-correct-answer="The ON/high portion of the square wave becomes wider.">
+                    <div class="exercise-title-row">
+                        <h3>Exercise 5: PWM Generator</h3>
+                        <a class="exercise-sim-link" href="{{ url_for('simulations.oscilloscope') }}">Open Oscilloscope Simulation</a>
+                    </div>
+                    <p>Connect to PWM Generator and change duty cycle.</p>
+                    <p><strong>Question:</strong> What changes when duty cycle increases?</p>
+                    <div class="exercise-options" role="group" aria-label="Exercise 5 answer options">
+                        <button type="button" data-answer="The ON/high portion of the square wave becomes wider.">The ON/high portion of the square wave becomes wider.</button>
+                        <button type="button" data-answer="The waveform becomes a triangle wave.">The waveform becomes a triangle wave.</button>
+                        <button type="button" data-answer="The frequency locks to 50 Hz.">The frequency locks to 50 Hz.</button>
+                        <button type="button" data-answer="The ground clip disconnects.">The ground clip disconnects.</button>
+                    </div>
+                    <p class="exercise-feedback" aria-live="polite">Select an answer after trying the simulation.</p>
+                </article>
+
+                <article class="exercise-item" data-exercise-id="sensor-signal" data-correct-answer="A changing analog signal.">
+                    <div class="exercise-title-row">
+                        <h3>Exercise 6: Sensor Signal</h3>
+                        <a class="exercise-sim-link" href="{{ url_for('simulations.oscilloscope') }}">Open Oscilloscope Simulation</a>
+                    </div>
+                    <p>Connect to Sensor Signal and observe the waveform.</p>
+                    <p><strong>Question:</strong> What type of signal does a sensor usually produce?</p>
+                    <div class="exercise-options" role="group" aria-label="Exercise 6 answer options">
+                        <button type="button" data-answer="A changing analog signal.">A changing analog signal.</button>
+                        <button type="button" data-answer="A fixed 50 Hz mains signal.">A fixed 50 Hz mains signal.</button>
+                        <button type="button" data-answer="Only a square PWM signal.">Only a square PWM signal.</button>
+                        <button type="button" data-answer="No electrical signal.">No electrical signal.</button>
+                    </div>
+                    <p class="exercise-feedback" aria-live="polite">Select an answer after trying the simulation.</p>
+                </article>
+
+                <article class="exercise-item" data-exercise-id="audio-signal" data-correct-answer="The sound pitch becomes higher.">
+                    <div class="exercise-title-row">
+                        <h3>Exercise 7: Audio Signal</h3>
+                        <a class="exercise-sim-link" href="{{ url_for('simulations.oscilloscope') }}">Open Oscilloscope Simulation</a>
+                    </div>
+                    <p>Connect to Audio Signal and press Play Tone.</p>
+                    <p><strong>Question:</strong> What happens when frequency increases?</p>
+                    <div class="exercise-options" role="group" aria-label="Exercise 7 answer options">
+                        <button type="button" data-answer="The sound pitch becomes higher.">The sound pitch becomes higher.</button>
+                        <button type="button" data-answer="The sound pitch becomes lower.">The sound pitch becomes lower.</button>
+                        <button type="button" data-answer="The waveform disappears.">The waveform disappears.</button>
+                        <button type="button" data-answer="The signal becomes AC Source.">The signal becomes AC Source.</button>
+                    </div>
+                    <p class="exercise-feedback" aria-live="polite">Select an answer after trying the simulation.</p>
+                </article>
+
+                <article class="exercise-item" data-exercise-id="noisy-signal" data-correct-answer="It makes the waveform rough or unstable.">
+                    <div class="exercise-title-row">
+                        <h3>Exercise 8: Noisy Signal</h3>
+                        <a class="exercise-sim-link" href="{{ url_for('simulations.oscilloscope') }}">Open Oscilloscope Simulation</a>
+                    </div>
+                    <p>Connect to Noisy Signal and increase noise level.</p>
+                    <p><strong>Question:</strong> What does noise do to the waveform?</p>
+                    <div class="exercise-options" role="group" aria-label="Exercise 8 answer options">
+                        <button type="button" data-answer="It makes the waveform rough or unstable.">It makes the waveform rough or unstable.</button>
+                        <button type="button" data-answer="It makes the waveform perfectly smooth.">It makes the waveform perfectly smooth.</button>
+                        <button type="button" data-answer="It removes the signal source.">It removes the signal source.</button>
+                        <button type="button" data-answer="It locks the frequency to 50 Hz.">It locks the frequency to 50 Hz.</button>
+                    </div>
+                    <p class="exercise-feedback" aria-live="polite">Select an answer after trying the simulation.</p>
+                </article>
+            </div>
+        </section>
+    </article>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/tutorial.js') }}"></script>
+{% endblock %}

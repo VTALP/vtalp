@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/assessment.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="assessment-hero">
+    <div>
+        <p class="eyebrow">Knowledge Check</p>
+        <h1>Oscilloscope Assessment</h1>
+        <p>Answer ten questions covering oscilloscope purpose, probes, controls, signal sources, PWM, and noise behavior.</p>
+    </div>
+    <div class="page-link-group">
+        <a class="back-link" href="{{ url_for('backend.dashboard') }}">Back to Dashboard</a>
+        <a class="back-link" href="{{ url_for('tutorials.oscilloscope') }}">Go to Tutorial</a>
+        <a class="back-link" href="{{ url_for('simulations.oscilloscope') }}">Go to Simulation</a>
+    </div>
+</section>
+
+<section class="assessment-layout" data-assessment="oscilloscope" data-passing-score="7" aria-label="Oscilloscope assessment">
+    <aside class="assessment-status">
+        <h2>Assessment Result</h2>
+        <div id="assessmentResultData" hidden data-device="oscilloscope" data-score="0" data-total="10" data-passed="false"></div>
+        <p class="score-display" id="scoreDisplay">Score: 0 / 10</p>
+        <p class="pass-message" id="passMessage">Submit your answers to see your result. Passing score: 7 / 10.</p>
+        <button class="retake-button" type="button" id="retakeButton">Retake Assessment</button>
+        <a class="dashboard-button" href="{{ url_for('backend.dashboard') }}">Return to Dashboard</a>
+    </aside>
+
+    <form class="assessment-form" id="assessmentForm">
+        <fieldset data-answer="voltageOverTime">
+            <legend>1. What is the main purpose of an oscilloscope?</legend>
+            <label><input type="radio" name="q1" value="voltageOverTime"> To display how voltage changes over time</label>
+            <label><input type="radio" name="q1" value="componentWeight"> To measure the physical weight of components</label>
+            <label><input type="radio" name="q1" value="sourceCode"> To edit Arduino source code</label>
+            <label><input type="radio" name="q1" value="resistanceOnly"> To measure only resistance values</label>
+        </fieldset>
+
+        <fieldset data-answer="signalInput">
+            <legend>2. What does the CH1 / Signal Probe do?</legend>
+            <label><input type="radio" name="q2" value="signalInput"> It carries the measured signal into channel 1</label>
+            <label><input type="radio" name="q2" value="powerSupply"> It powers the oscilloscope screen</label>
+            <label><input type="radio" name="q2" value="noiseFilter"> It automatically removes all noise</label>
+            <label><input type="radio" name="q2" value="volumeControl"> It controls audio volume only</label>
+        </fieldset>
+
+        <fieldset data-answer="referencePoint">
+            <legend>3. Why is the Ground Clip needed?</legend>
+            <label><input type="radio" name="q3" value="referencePoint"> It provides the reference point for measuring voltage</label>
+            <label><input type="radio" name="q3" value="changeWaveform"> It changes sine waves into square waves</label>
+            <label><input type="radio" name="q3" value="increasePitch"> It increases audio pitch</label>
+            <label><input type="radio" name="q3" value="selectDuty"> It selects PWM duty cycle</label>
+        </fieldset>
+
+        <fieldset data-answer="cyclesPerSecond">
+            <legend>4. What does frequency describe?</legend>
+            <label><input type="radio" name="q4" value="cyclesPerSecond"> How many cycles occur per second</label>
+            <label><input type="radio" name="q4" value="signalHeight"> The height of the waveform</label>
+            <label><input type="radio" name="q4" value="screenBrightness"> The brightness of the screen</label>
+            <label><input type="radio" name="q4" value="groundConnection"> The ground connection type</label>
+        </fieldset>
+
+        <fieldset data-answer="waveHeight">
+            <legend>5. What happens when amplitude increases?</legend>
+            <label><input type="radio" name="q5" value="waveHeight"> The waveform becomes taller</label>
+            <label><input type="radio" name="q5" value="moreCycles"> More cycles appear closer together</label>
+            <label><input type="radio" name="q5" value="lowerPitch"> The sound pitch always becomes lower</label>
+            <label><input type="radio" name="q5" value="noSignal"> The signal disappears</label>
+        </fieldset>
+
+        <fieldset data-answer="horizontalScale">
+            <legend>6. What does Time/Div control?</legend>
+            <label><input type="radio" name="q6" value="horizontalScale"> The horizontal time scale of the waveform display</label>
+            <label><input type="radio" name="q6" value="verticalScale"> The vertical voltage scale only</label>
+            <label><input type="radio" name="q6" value="audioVolume"> The audio volume level</label>
+            <label><input type="radio" name="q6" value="probeColor"> The color of the probe</label>
+        </fieldset>
+
+        <fieldset data-answer="verticalScale">
+            <legend>7. What does Volt/Div control?</legend>
+            <label><input type="radio" name="q7" value="verticalScale"> The vertical voltage scale of the waveform display</label>
+            <label><input type="radio" name="q7" value="horizontalScale"> The horizontal time scale only</label>
+            <label><input type="radio" name="q7" value="sourceType"> Which signal source is connected</label>
+            <label><input type="radio" name="q7" value="groundClip"> Whether the ground clip is attached</label>
+        </fieldset>
+
+        <fieldset data-answer="fiftyHz">
+            <legend>8. What frequency does the AC Source show in the simulation?</legend>
+            <label><input type="radio" name="q8" value="fiveHz"> 5 Hz</label>
+            <label><input type="radio" name="q8" value="fiftyHz"> 50 Hz</label>
+            <label><input type="radio" name="q8" value="fourFortyHz"> 440 Hz</label>
+            <label><input type="radio" name="q8" value="zeroHz"> 0 Hz</label>
+        </fieldset>
+
+        <fieldset data-answer="widerHighPortion">
+            <legend>9. What changes when PWM duty cycle increases?</legend>
+            <label><input type="radio" name="q9" value="widerHighPortion"> The ON/high part of the square wave becomes wider</label>
+            <label><input type="radio" name="q9" value="triangleOnly"> The waveform becomes triangle only</label>
+            <label><input type="radio" name="q9" value="lockedFrequency"> The AC Source locks to 50 Hz</label>
+            <label><input type="radio" name="q9" value="groundMissing"> The ground clip is removed automatically</label>
+        </fieldset>
+
+        <fieldset data-answer="roughUnstable">
+            <legend>10. How does noise affect a waveform?</legend>
+            <label><input type="radio" name="q10" value="roughUnstable"> It makes the waveform rough or unstable</label>
+            <label><input type="radio" name="q10" value="perfectSmooth"> It makes every signal perfectly smooth</label>
+            <label><input type="radio" name="q10" value="noVoltage"> It always removes all voltage</label>
+            <label><input type="radio" name="q10" value="fixedDuty"> It fixes PWM duty cycle at 50%</label>
+        </fieldset>
+
+        <button class="submit-button" type="submit">Submit Assessment</button>
+        <div class="feedback-panel" id="feedbackPanel" aria-live="polite"></div>
+    </form>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/assessment.js') }}"></script>
+{% endblock %}

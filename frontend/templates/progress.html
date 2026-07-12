@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/progress.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-shell">
+    {% include "_dashboard_sidebar.html" %}
+
+    <section class="dashboard-main progress-page">
+        <header class="dashboard-topbar">
+            <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-controls="dashboardSidebar" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div>
+                <p class="dashboard-kicker">Step 4</p>
+                <h1>Your VTALP Progress</h1>
+                <p class="dashboard-subtitle">Track tutorials, simulations, exercises, assessments, milestones, and recent learning activity.</p>
+            </div>
+        </header>
+
+        <div class="overall-grid" aria-label="Overall progress summary">
+        <article>
+            <span>Total Tutorials Completed</span>
+            <strong>{{ summary.tutorials_completed }} / {{ summary.total_tutorials }}</strong>
+        </article>
+        <article>
+            <span>Exercises Completed</span>
+            <strong>{{ summary.exercises_completed }} / {{ summary.total_exercises }}</strong>
+        </article>
+        <article>
+            <span>Assessments Completed</span>
+            <strong>{{ summary.assessments_completed }} / {{ summary.total_assessments }}</strong>
+        </article>
+        <article>
+            <span>Average Assessment Score</span>
+            <strong>{{ summary.average_assessment }}%</strong>
+        </article>
+        <article>
+            <span>Overall Platform Completion</span>
+            <strong>{{ summary.overall_completion }}%</strong>
+        </article>
+    </div>
+
+    <section class="overall-bar-card">
+        <div class="section-heading-row">
+            <h2>Overall Completion</h2>
+            <strong>{{ summary.overall_completion }}%</strong>
+        </div>
+        <div class="large-progress-bar">
+            <span style="width: {{ summary.overall_completion }}%"></span>
+        </div>
+    </section>
+
+    <section class="device-progress-list" aria-label="Device progress details">
+        {% for device in devices %}
+        <article class="progress-device-card" id="{{ device.slug }}">
+            <div class="device-card-heading">
+                <div class="device-icon">{{ device.icon }}</div>
+                <div>
+                    <h2>{{ device.name }}</h2>
+                    <p>{{ device.completion_percentage }}% complete</p>
+                </div>
+            </div>
+
+            <div class="large-progress-bar">
+                <span style="width: {{ device.completion_percentage }}%"></span>
+            </div>
+
+            <div class="status-grid">
+                <div>
+                    <span>Tutorial Status</span>
+                    <strong>{{ device.tutorial_status }}</strong>
+                    <a href="{{ device.tutorial_url }}">Open Tutorial</a>
+                </div>
+                <div>
+                    <span>Simulation Status</span>
+                    <strong>{{ device.simulation_status }}</strong>
+                    <a href="{{ device.simulation_url }}">Open Simulation</a>
+                </div>
+                <div>
+                    <span>Exercise Status</span>
+                    <strong>{{ device.exercise_status }}</strong>
+                    <a href="{{ device.tutorial_url }}#tutorialExercises">Open Exercises</a>
+                </div>
+                <div>
+                    <span>Components Tested</span>
+                    <strong>{{ device.component_status }}</strong>
+                    <a href="{{ device.simulation_url }}">Open Lab</a>
+                </div>
+                <div>
+                    <span>Assessment Score</span>
+                    <strong>{{ device.assessment_label }}</strong>
+                    <a href="{{ device.assessment_url }}">Take Assessment</a>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </section>
+
+    <section class="progress-section-card" aria-label="Learning milestones">
+        <div class="section-heading-row">
+            <div>
+                <h2>Learning Milestones</h2>
+                <p>Achievements earned from tutorials, simulations, exercises, and assessments.</p>
+            </div>
+        </div>
+
+        <div class="achievement-grid">
+            {% for badge in achievements %}
+            <article class="achievement-card {% if badge.earned %}earned{% endif %}">
+                <span class="achievement-icon" aria-hidden="true">{% if badge.earned %}✓{% else %}•{% endif %}</span>
+                <div>
+                    <h3>{{ badge.name }}</h3>
+                    <p>{{ badge.description }}</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="progress-lower-grid">
+        <article class="progress-section-card">
+            <h2>Quick Actions</h2>
+            <div class="action-list">
+                <a href="{{ url_for('tutorials.tutorial_home') }}">Study a tutorial</a>
+                <a href="{{ url_for('simulations.simulation_home') }}">Practice with a simulation</a>
+                <a href="{{ url_for('assessments.assessment_home') }}">Attempt an assessment</a>
+                <a href="{{ url_for('backend.dashboard') }}">Return to dashboard</a>
+            </div>
+        </article>
+
+        <article class="progress-section-card learning-timeline">
+            <h2>Recent Learning Events</h2>
+            {% if activity_timeline %}
+            <ul>
+                {% for activity in activity_timeline %}
+                <li>
+                    <span class="timeline-dot" aria-hidden="true"></span>
+                    <div>
+                        <strong>{{ activity.type }}</strong>
+                        <p>{{ activity.device }} - {{ activity.detail }}</p>
+                        <small>{{ activity.timestamp }}</small>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <div class="empty-analytics-state">
+                <strong>No learning activity yet</strong>
+                <p>Complete a tutorial, open a simulation, or take an assessment to start building your timeline.</p>
+            </div>
+            {% endif %}
+        </article>
+    </section>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

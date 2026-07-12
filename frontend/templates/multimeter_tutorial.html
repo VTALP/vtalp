@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tutorial.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="tutorial-hero">
+    <div>
+        <p class="eyebrow">Device Tutorial</p>
+        <h1>Digital Multimeter Tutorial</h1>
+        <p>Learn how a DMM is used to measure voltage, resistance, and continuity before entering the simulation lab.</p>
+    </div>
+    <div class="page-link-group">
+        <a class="back-link" href="{{ url_for('backend.dashboard') }}">Back to Dashboard</a>
+        <a class="back-link" href="{{ url_for('simulations.multimeter') }}">Go to Simulation</a>
+        <a class="back-link" href="{{ url_for('assessments.multimeter') }}">Take Assessment</a>
+    </div>
+</section>
+
+<section class="tutorial-layout" data-tutorial="multimeter" data-simulation-url="{{ url_for('simulations.multimeter') }}" aria-label="Digital Multimeter tutorial">
+    <aside class="tutorial-progress-card">
+        <h2>Tutorial Progress</h2>
+        <div id="tutorialProgressData" hidden data-device="multimeter" data-completed="false" data-percent="0"></div>
+        <div class="progress-meter"><div class="progress-fill" id="progressFill"></div></div>
+        <p><strong id="progressPercent">0%</strong> completed</p>
+        <div class="badge-row">
+            <span class="badge" id="lessonBadge">Lesson In Progress</span>
+            <span class="badge" id="tutorialBadge">Tutorial In Progress</span>
+        </div>
+        <section class="learning-path-card" aria-label="Digital Multimeter guided learning path">
+            <div class="learning-path-heading">
+                <h3>Guided Learning Path</h3>
+                <span id="pathProgressText">0 of 5 steps complete</span>
+            </div>
+            <ol class="learning-path-list">
+                <li><button type="button" class="path-step" data-step="1" data-target=".anatomy-card"><span class="step-marker">1</span><span>Learn Device Components</span></button></li>
+                <li><button type="button" class="path-step" data-step="2" data-target="#measurementModes"><span class="step-marker">2</span><span>Learn Measurement Modes</span></button></li>
+                <li><button type="button" class="path-step" data-step="3" data-target="#probePlacement"><span class="step-marker">3</span><span>Learn Probe Placement</span></button></li>
+                <li><button type="button" class="path-step" data-step="4" data-target="#practiceMeasurement"><span class="step-marker">4</span><span>Practice Measurement</span></button></li>
+                <li><button type="button" class="path-step" data-step="5" data-target="simulation"><span class="step-marker">5</span><span>Open Simulation</span></button></li>
+            </ol>
+            <div class="next-step-box">
+                <span>Next Step</span>
+                <strong id="nextStepText">Learn Device Components</strong>
+            </div>
+            <button class="continue-learning-button" type="button" id="continueLearningButton">Continue Learning</button>
+        </section>
+        <button class="complete-button" type="button" id="markCompleteButton">Mark Tutorial as Complete</button>
+        <a class="complete-button secondary-link" href="{{ url_for('backend.dashboard') }}">Return to Dashboard</a>
+    </aside>
+
+    <article class="tutorial-content">
+        <section class="tutorial-card">
+            <h2>Learning Objectives</h2>
+            <ul class="check-list">
+                <li>Identify the display, selector dial, ports, and probes.</li>
+                <li>Select the correct mode for voltage, resistance, and continuity.</li>
+                <li>Place probes safely and interpret the meter reading.</li>
+                <li>Recognize common measurement mistakes.</li>
+            </ul>
+        </section>
+
+        <section class="tutorial-card">
+            <h2>Introduction</h2>
+            <p>A digital multimeter is an electronic measuring instrument used to test electrical quantities. In VTALP, it helps you practice safe measurement habits before using real circuits.</p>
+        </section>
+
+        <section class="diagram-card anatomy-card" data-diagram="multimeter">
+            <div class="anatomy-heading">
+                <h2>Explore the Device</h2>
+                <p>Inspect the digital multimeter before entering the simulation. Select a hotspot to study its function, real-world usage, and beginner tip.</p>
+            </div>
+            <div class="anatomy-layout">
+                <div class="anatomy-device dmm-anatomy" aria-label="Interactive digital multimeter anatomy diagram">
+                    <div class="dmm-shell" aria-hidden="true">
+                        <div class="dmm-screen">8.88</div>
+                        <div class="dmm-dial"><span>OFF</span><span>V</span><span>Ohm</span><span>BEEP</span></div>
+                        <div class="dmm-port-row">
+                            <span class="dmm-port com-port">COM</span>
+                            <span class="dmm-port v-port">V/Ohm</span>
+                        </div>
+                        <div class="dmm-test-points"><span>+</span><span>-</span></div>
+                        <div class="probe-lead black-lead"></div>
+                        <div class="probe-lead red-lead"></div>
+                        <div class="probe-tip black-tip"></div>
+                        <div class="probe-tip red-tip"></div>
+                    </div>
+                    <button class="anatomy-hotspot" type="button" style="--x: 50%; --y: 16%;" data-title="Display Screen" data-purpose="Shows the measured value, unit, and warning symbols." data-usage="Technicians use it to confirm readings before deciding whether a circuit is working correctly." data-tip="Always check the unit on the display, not only the number.">Display Screen</button>
+                    <button class="anatomy-hotspot" type="button" style="--x: 49%; --y: 43%;" data-title="Rotary Selector Dial" data-purpose="Selects the measurement mode before taking a reading." data-usage="Used when switching between voltage checks, resistance checks, and continuity tests." data-tip="Choose the mode before touching the circuit with the probes.">Rotary Dial</button>
+                    <button class="anatomy-hotspot" type="button" style="--x: 33%; --y: 66%;" data-title="COM Port" data-purpose="Connection point for the black probe." data-usage="Used as the common reference terminal for almost every multimeter measurement." data-tip="Think of COM as the starting reference point for the meter.">COM Port</button>
+                    <button class="anatomy-hotspot" type="button" style="--x: 65%; --y: 66%;" data-title="V/Ohm Port" data-purpose="Connection point for the red probe when measuring voltage, resistance, or continuity." data-usage="Used for the common beginner measurements practiced in VTALP labs." data-tip="For these lessons, the red probe belongs here unless a task says otherwise.">V/Ohm Port</button>
+                    <button class="anatomy-hotspot" type="button" style="--x: 21%; --y: 87%;" data-title="Black Probe" data-purpose="The common probe that connects to the COM port." data-usage="Used on ground, the negative battery terminal, or one side of a component." data-tip="Place the black probe first to make the measurement more stable.">Black Probe</button>
+                    <button class="anatomy-hotspot" type="button" style="--x: 79%; --y: 87%;" data-title="Red Probe" data-purpose="The active probe used to contact the point being measured." data-usage="Used on the positive terminal, signal point, or the other side of a component." data-tip="Move the red probe carefully; it is usually the probe that explores the circuit.">Red Probe</button>
+                    <button class="anatomy-hotspot" type="button" style="--x: 50%; --y: 79%;" data-title="Test Points" data-purpose="The two circuit points where the probes make contact." data-usage="Used to measure the electrical relationship between two points in a circuit." data-tip="A good reading starts with clean, firm contact at both test points.">Test Points</button>
+                </div>
+                <aside class="anatomy-info" aria-live="polite">
+                    <span class="anatomy-eyebrow">Explore the Device</span>
+                    <h3 data-anatomy-title>Hover over a component</h3>
+                    <p data-anatomy-purpose><strong>Function:</strong> Select a label on the diagram to identify the part and its role.</p>
+                    <p data-anatomy-usage><strong>Real-world usage:</strong> Each explanation connects the part to a practical measurement habit.</p>
+                    <p data-anatomy-tip><strong>Beginner tip:</strong> Use the hotspot labels as a quick inspection checklist.</p>
+                </aside>
+            </div>
+        </section>
+
+        <section class="tutorial-card" id="measurementModes">
+            <h2>Device Parts and Functions</h2>
+            <ul class="activity-list">
+                <li><strong>Display:</strong> Shows the measured value and unit.</li>
+                <li><strong>Rotary selector:</strong> Chooses voltage, resistance, or continuity mode.</li>
+                <li><strong>COM port:</strong> Holds the black probe.</li>
+                <li><strong>V/Ohm port:</strong> Holds the red probe for beginner measurements.</li>
+            </ul>
+        </section>
+
+        <section class="tutorial-card">
+            <h2>Lesson Sections</h2>
+            <div class="lesson-block"><h3>What is a DMM?</h3><p>A DMM measures electrical values and helps diagnose circuits.</p></div>
+            <div class="lesson-block"><h3>Voltage Measurement</h3><p>Use DC Voltage mode on powered DC sources such as batteries.</p></div>
+            <div class="lesson-block"><h3>Resistance Measurement</h3><p>Use resistance mode only when the circuit is unpowered.</p></div>
+            <div class="lesson-block"><h3>Continuity Testing</h3><p>Continuity mode checks whether a complete path exists.</p></div>
+            <div class="lesson-block"><h3>Probe Placement</h3><p>Place the black probe on the reference point and the red probe on the test point.</p></div>
+        </section>
+
+        <section class="tutorial-card" id="probePlacement">
+            <h2>Step-by-Step Usage Guide</h2>
+            <ol class="step-list">
+                <li>Connect the black probe to COM and the red probe to V/Ohm.</li>
+                <li>Select the correct mode for the measurement.</li>
+                <li>Choose the correct sample or circuit point.</li>
+                <li>Touch both probes to different test points.</li>
+                <li>Read the value and confirm the unit.</li>
+            </ol>
+        </section>
+
+        <section class="tutorial-card">
+            <h2>Polarity and Negative Readings</h2>
+            <p>DC voltage has direction. When the red probe touches the positive terminal and the black probe touches the negative terminal, the meter shows a positive voltage such as 9.00 V.</p>
+            <p>If the probes are reversed, the measurement is still valid. The meter shows a negative value such as -9.00 V to show that the polarity is opposite.</p>
+        </section>
+
+        <section class="tutorial-card" id="practiceMeasurement">
+            <h2>Common Mistakes</h2>
+            <ul class="activity-list">
+                <li>Using resistance mode on a powered battery.</li>
+                <li>Placing both probes on the same point.</li>
+                <li>Using continuity mode when voltage should be measured.</li>
+                <li>Treating a negative DC voltage as an error instead of a reversed-polarity reading.</li>
+                <li>Leaving the red probe in the 10A port after a current measurement.</li>
+            </ul>
+        </section>
+
+        <section class="tutorial-card">
+            <h2>Safety and Best Practice Tips</h2>
+            <ul class="activity-list">
+                <li>Start with the correct mode before touching the probes to a circuit.</li>
+                <li>Measure resistance and continuity only on unpowered circuits.</li>
+                <li>Stop and review if the meter shows overload or error.</li>
+                <li>Use voltage ranges only when measuring across a source or component.</li>
+                <li>Use current ranges only when the meter is placed in series with the circuit.</li>
+                <li>Keep the black probe in COM for normal beginner measurements.</li>
+            </ul>
+        </section>
+
+        <section class="tutorial-card exercise-card" id="tutorialExercises" data-exercise-device="multimeter">
+            <div class="exercise-heading">
+                <div>
+                    <h2>Exercises</h2>
+                    <p>Practice in the DMM simulation, return here, and choose the result you observed.</p>
+                </div>
+                <div class="exercise-progress" aria-label="Tutorial exercise progress">
+                    <strong id="exerciseProgressText">0/5 complete</strong>
+                    <span id="exerciseProgressPercent">0%</span>
+                </div>
+            </div>
+            <div class="exercise-progress-bar">
+                <span id="exerciseProgressFill"></span>
+            </div>
+            <p class="exercise-completion-badge" id="exerciseCompletionBadge">Practice activities in progress</p>
+
+            <div class="exercise-list">
+                <article class="exercise-item" data-exercise-id="battery" data-correct-answer="Around 9V">
+                    <div class="exercise-title-row">
+                        <h3>Exercise 1: Measure a 9V Battery</h3>
+                        <a class="exercise-sim-link" href="{{ url_for('simulations.multimeter') }}">Open DMM Simulation</a>
+                    </div>
+                    <p>Go to the DMM simulation, select DC 20V, connect probes correctly, measure the 9V battery, then return here and select the correct reading.</p>
+                    <div class="exercise-options" role="group" aria-label="Exercise 1 answer options">
+                        <button type="button" data-answer="0.00V">0.00V</button>
+                        <button type="button" data-answer="Around 9V">Around 9V</button>
+                        <button type="button" data-answer="OL">OL</button>
+                        <button type="button" data-answer="220Ω">220Ω</button>
+                    </div>
+                    <p class="exercise-feedback" aria-live="polite">Select an answer after trying the simulation.</p>
+                </article>
+
+                <article class="exercise-item" data-exercise-id="resistor" data-correct-answer="Around 220Ω">
+                    <div class="exercise-title-row">
+                        <h3>Exercise 2: Measure a 220Ω Resistor</h3>
+                        <a class="exercise-sim-link" href="{{ url_for('simulations.multimeter') }}">Open DMM Simulation</a>
+                    </div>
+                    <p>Go to the DMM simulation, select 2kΩ resistance range, measure the resistor, then return here and select the correct reading.</p>
+                    <div class="exercise-options" role="group" aria-label="Exercise 2 answer options">
+                        <button type="button" data-answer="Around 220Ω">Around 220Ω</button>
+                        <button type="button" data-answer="9V">9V</button>
+                        <button type="button" data-answer="OL">OL</button>
+                        <button type="button" data-answer="10A">10A</button>
+                    </div>
+                    <p class="exercise-feedback" aria-live="polite">Select an answer after trying the simulation.</p>
+                </article>
+
+                <article class="exercise-item" data-exercise-id="fuse" data-correct-answer="Beep / low resistance">
+                    <div class="exercise-title-row">
+                        <h3>Exercise 3: Test a Good Fuse</h3>
+                        <a class="exercise-sim-link" href="{{ url_for('simulations.multimeter') }}">Open DMM Simulation</a>
+                    </div>
+                    <p>Go to the DMM simulation, select Continuity mode, test the good fuse, then return here and select what happened.</p>
+                    <div class="exercise-options" role="group" aria-label="Exercise 3 answer options">
+                        <button type="button" data-answer="Beep / low resistance">Beep / low resistance</button>
+                        <button type="button" data-answer="230V AC">230V AC</button>
+                        <button type="button" data-answer="No reading">No reading</button>
+                        <button type="button" data-answer="Current overload">Current overload</button>
+                    </div>
+                    <p class="exercise-feedback" aria-live="polite">Select an answer after trying the simulation.</p>
+                </article>
+
+                <article class="exercise-item" data-exercise-id="outlet" data-correct-answer="Around 220V–240V AC">
+                    <div class="exercise-title-row">
+                        <h3>Exercise 4: Measure AC Outlet Voltage</h3>
+                        <a class="exercise-sim-link" href="{{ url_for('simulations.multimeter') }}">Open DMM Simulation</a>
+                    </div>
+                    <p>Go to the DMM simulation, select AC 750V, measure the AC outlet, then return here and select the correct result.</p>
+                    <div class="exercise-options" role="group" aria-label="Exercise 4 answer options">
+                        <button type="button" data-answer="Around 220V–240V AC">Around 220V–240V AC</button>
+                        <button type="button" data-answer="9V DC">9V DC</button>
+                        <button type="button" data-answer="220Ω">220Ω</button>
+                        <button type="button" data-answer="0.0A">0.0A</button>
+                    </div>
+                    <p class="exercise-feedback" aria-live="polite">Select an answer after trying the simulation.</p>
+                </article>
+
+                <article class="exercise-item" data-exercise-id="lamp" data-correct-answer="Around 0.90A">
+                    <div class="exercise-title-row">
+                        <h3>Exercise 5: Measure Lamp Circuit Current</h3>
+                        <a class="exercise-sim-link" href="{{ url_for('simulations.multimeter') }}">Open DMM Simulation</a>
+                    </div>
+                    <p>Go to the DMM simulation, select DC 10A, connect the red probe to 10A, measure the lamp circuit current, then return here and select the correct result.</p>
+                    <div class="exercise-options" role="group" aria-label="Exercise 5 answer options">
+                        <button type="button" data-answer="Around 0.90A">Around 0.90A</button>
+                        <button type="button" data-answer="220Ω">220Ω</button>
+                        <button type="button" data-answer="230V AC">230V AC</button>
+                        <button type="button" data-answer="Beep">Beep</button>
+                    </div>
+                    <p class="exercise-feedback" aria-live="polite">Select an answer after trying the simulation.</p>
+                </article>
+            </div>
+        </section>
+    </article>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/tutorial.js') }}"></script>
+{% endblock %}

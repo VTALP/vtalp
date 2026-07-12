@@ -1,0 +1,382 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/arduino.css') }}?v=arduino-free-build-save-1">
+{% endblock %}
+
+{% block content %}
+<section class="arduino-hero">
+    <div>
+        <h1>Arduino Trainer Lab</h1>
+        <p>
+            Practice Arduino wiring, code upload, and guided circuit simulation.
+        </p>
+    </div>
+    <nav class="page-link-group" aria-label="Arduino lab navigation">
+        <a class="back-link" href="{{ url_for('tutorials.arduino') }}">Tutorial</a>
+        <a class="back-link" href="{{ url_for('assessments.arduino') }}">Assessment</a>
+        <a class="back-link" href="{{ url_for('backend.progress') }}#arduino">Progress</a>
+        <label class="simulation-switcher">
+            <span>Switch Simulation</span>
+            <select aria-label="Switch simulation" onchange="if (this.value) window.location.href = this.value;">
+                <option value="/simulations/dmm">Digital Multimeter</option>
+                <option value="/simulations/oscilloscope">Oscilloscope</option>
+                <option value="" selected disabled>Arduino Lab (Current)</option>
+            </select>
+        </label>
+        <span class="module-status">Module Ready</span>
+    </nav>
+</section>
+
+<section class="arduino-foundation-grid" aria-label="Arduino lab foundation">
+    <aside class="lab-devices-panel" aria-label="Arduino lab project and device library">
+        <div class="panel-heading">
+            <span class="card-kicker">Learning Path</span>
+            <h2 id="libraryPanelTitle">Arduino Lessons</h2>
+        </div>
+
+        <button type="button" class="back-to-lessons-button" id="backToLessonsButton" hidden>← Back to Lessons</button>
+
+        <div class="free-build-confirm" id="leaveFreeBuildDialog" hidden role="dialog" aria-labelledby="leaveFreeBuildTitle">
+            <strong id="leaveFreeBuildTitle">Leave Free Build?</strong>
+            <p id="leaveFreeBuildMessage">You have unsaved changes.</p>
+            <div class="free-build-confirm-actions">
+                <button type="button" id="saveAndLeaveFreeBuildButton">Save and Leave</button>
+                <button type="button" id="confirmLeaveFreeBuildButton">Leave Without Saving</button>
+                <button type="button" id="cancelLeaveFreeBuildButton">Cancel</button>
+            </div>
+        </div>
+
+        <div class="guided-project-library" id="guidedProjectLibrary">
+            <details class="project-category" open>
+                <summary>Arduino Lessons</summary>
+                <div class="project-card-list">
+                    <button type="button" class="project-card" data-board-intro="meet-board">
+                        <strong>Meet the Board</strong>
+                        <span>USB, pins, power, and reset.</span>
+                    </button>
+                    <button type="button" class="project-card" data-project="blink-led">
+                        <strong>Blink an LED</strong>
+                        <span>Wire D13 output.</span>
+                    </button>
+                    <button type="button" class="project-card" data-project="read-push-button">
+                        <strong>Read a Push Button</strong>
+                        <span>Read D2 input.</span>
+                    </button>
+                    <button type="button" class="project-card" data-project="read-potentiometer">
+                        <strong>Control LED Brightness</strong>
+                        <span>Use a knob input.</span>
+                    </button>
+                    <button type="button" class="project-card" data-project="buzzer-tone">
+                        <strong>Play a Tone</strong>
+                        <span>Drive a buzzer.</span>
+                    </button>
+                </div>
+            </details>
+        </div>
+
+        <div class="lesson-component-summary" id="lessonComponentSummary" hidden>
+            <span class="card-kicker">Needed Parts</span>
+            <ul id="lessonComponentList"></ul>
+        </div>
+
+        <div class="lesson-mode-bridge" aria-hidden="true">
+            <label class="mode-option active">
+                <input type="radio" name="learning-mode" value="guided" checked>
+                Guided Lab
+            </label>
+            <label class="mode-option">
+                <input type="radio" name="learning-mode" value="free">
+                Free Build
+            </label>
+        </div>
+
+        <button type="button" class="free-build-tab" id="freeBuildTab">Free Build</button>
+
+        <div class="free-build-device-library" id="freeBuildDeviceLibrary" hidden>
+            <details class="device-category" open>
+                <summary>Basic Components</summary>
+                <ul class="device-list">
+                    <li><button type="button" class="device-item" data-device="breadboard">Breadboard</button></li>
+                    <li><button type="button" class="device-item" data-device="led">LED</button></li>
+                    <li><button type="button" class="device-item" data-device="resistor">220Ω Resistor</button></li>
+                    <li><button type="button" class="device-item" data-device="push-button">Push Button</button></li>
+                    <li><button type="button" class="device-item" data-device="potentiometer">Potentiometer</button></li>
+                    <li><button type="button" class="device-item" data-device="buzzer">Buzzer</button></li>
+                </ul>
+            </details>
+        </div>
+    </aside>
+
+    <main class="arduino-workspace-panel" aria-label="Arduino workspace">
+        <article class="workspace-shell">
+            <div class="workspace-header">
+                <div>
+                    <span class="card-kicker">Arduino Workspace</span>
+                    <h2>Arduino Uno</h2>
+                </div>
+                <div class="workspace-header-actions">
+                    <span class="workspace-status">Ready for Lab Setup</span>
+                    <button class="workspace-stop-button" id="workspaceStopSimulationButton" type="button" disabled>Stop Simulation</button>
+                </div>
+            </div>
+
+            <div class="workspace-stage" aria-label="Arduino Uno centered workspace">
+                <svg class="wire-layer" id="wireLayer" aria-hidden="true"></svg>
+                <div class="arduino-uno-board" aria-label="Large Arduino Uno illustration">
+                    <div class="arduino-board-scale-unit">
+                        <span class="mount-hole hole-top-left" aria-hidden="true"></span>
+                        <span class="mount-hole hole-top-right" aria-hidden="true"></span>
+                        <span class="mount-hole hole-bottom-left" aria-hidden="true"></span>
+                        <span class="mount-hole hole-bottom-right" aria-hidden="true"></span>
+
+                        <div class="usb-port" data-board-part="usb"><span>USB</span></div>
+                        <div class="usb-cable" id="usbCable" hidden aria-hidden="true"></div>
+                        <div class="barrel-jack"><span>DC</span></div>
+                        <div class="reset-button" data-board-part="reset" aria-label="Reset button">RESET</div>
+
+                        <div class="board-brand">
+                            <span>ARDUINO</span>
+                            <strong>UNO</strong>
+                        </div>
+
+                        <div class="digital-header" data-board-part="digital-pins" aria-label="Digital pin header">
+                            <span class="header-label">DIGITAL</span>
+                            <div class="pin-row">
+                                <span>D0</span><span>D1</span><span>D2</span><span>D3~</span><span>D4</span><span>D5~</span><span>D6~</span>
+                                <span>D7</span><span>D8</span><span>D9~</span><span>D10~</span><span>D11~</span><span>D12</span><span>D13</span>
+                            </div>
+                        </div>
+
+                        <div class="power-header" data-board-part="power-pins" aria-label="Power pin header">
+                            <span class="header-label">POWER</span>
+                            <div class="pin-row vertical">
+                                <span>IOREF</span><span>RESET</span><span>3.3V</span><span>5V</span><span>GND</span><span>GND</span><span>VIN</span>
+                            </div>
+                        </div>
+
+                        <div class="analog-header" data-board-part="analog-pins" aria-label="Analog pin header">
+                            <span class="header-label">ANALOG IN</span>
+                            <div class="pin-row">
+                                <span>A0</span><span>A1</span><span>A2</span><span>A3</span><span>A4</span><span>A5</span>
+                            </div>
+                        </div>
+
+                        <div class="atmega-chip"><span>ATmega328P</span></div>
+                        <div class="usb-chip"><span>USB CTRL</span></div>
+                        <div class="icsp-header"><span>ICSP</span><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                        <div class="crystal main-crystal">16MHz</div>
+                        <div class="crystal usb-crystal">16MHz</div>
+
+                        <div class="led-bank" aria-label="Board LEDs">
+                            <span>ON</span>
+                            <span>TX</span>
+                            <span>RX</span>
+                            <span data-board-part="built-in-led" data-built-in-led="pin-13">L</span>
+                        </div>
+                        <div class="board-tooltip" id="boardTooltip" role="tooltip" hidden></div>
+                    </div>
+                </div>
+
+                <div class="selected-device-layer" id="selectedDeviceLayer" aria-live="polite" hidden></div>
+                <p class="workspace-empty-message" id="workspaceEmptyMessage">Select a lesson to begin.</p>
+            </div>
+        </article>
+    </main>
+
+    <aside class="lab-controls-panel" id="labControlsPanel" aria-label="Lab sidebar">
+        <article class="control-card coach-card" id="coachCard">
+            <span class="card-kicker">Lab Coach</span>
+            <h2>Current Step</h2>
+            <p id="labCoachMessage">Choose a lesson from the left panel to start learning.</p>
+            <div class="coach-detail-list" id="labCoachDetails">
+                <p>Select a lesson when you are ready.</p>
+            </div>
+        </article>
+
+        <article class="control-card wiring-card" id="wiringCard">
+            <span class="card-kicker">Current Task</span>
+            <h2>Lesson Flow</h2>
+            <p class="wiring-step-text" id="wiringStepText">No lesson selected.</p>
+            <div class="wiring-progress" aria-label="Wiring progress">
+                <span id="completedStepCount">0 completed</span>
+                <span id="remainingStepCount">0 remaining</span>
+            </div>
+            <ol class="wiring-step-list" id="wiringStepList"></ol>
+            <button class="lesson-action-button clear-workspace-inline" id="guidedClearWorkspaceButton" type="button" hidden>Clear Workspace</button>
+            <button class="lesson-action-button" id="resetWiringButton" type="button">Reset Wiring</button>
+            <button class="lesson-action-button" id="completeBoardIntroButton" type="button" hidden>Complete Meet the Board</button>
+            <section class="lesson-complete-panel" id="lessonCompletePanel" hidden aria-live="polite">
+                <h3>Lesson completed successfully.</h3>
+                <p>You have completed:</p>
+                <strong id="completedLessonTitle">Blink an LED</strong>
+                <div>
+                    <span>Key concepts learned:</span>
+                    <ul id="completedLessonConcepts"></ul>
+                </div>
+                <div class="lesson-complete-actions">
+                    <button class="lesson-action-button primary" id="startNextLessonButton" type="button">Start Next Lesson</button>
+                    <button class="lesson-action-button" id="clearCompletedWorkspaceButton" type="button">Clear Workspace</button>
+                    <button class="lesson-action-button" id="stayHereButton" type="button">Stay Here</button>
+                </div>
+            </section>
+        </article>
+
+        <article class="control-card status-card" id="usbCard">
+            <span class="card-kicker">USB</span>
+            <h2>USB Status</h2>
+            <p class="status-pill muted" id="usbStatus">Not Connected</p>
+            <button class="connect-usb-button" id="connectUsbButton" type="button">Connect USB</button>
+        </article>
+
+        <article class="control-card code-studio-card" id="codeStudioCard" aria-disabled="true">
+            <span class="card-kicker">Code</span>
+            <h2>Code Studio</h2>
+            <label class="code-studio-label" for="sketchSelect">Select Sketch</label>
+            <select id="sketchSelect" disabled>
+                <option value="blink-led">Blink LED</option>
+                <option value="read-button">Read Button</option>
+                <option value="read-potentiometer">Control LED Brightness</option>
+                <option value="buzzer-tone">Buzzer Tone</option>
+                <option value="blank-sketch">Blank Sketch</option>
+            </select>
+            <textarea class="code-editor" id="codeEditor" aria-label="Editable Arduino code editor" spellcheck="false" disabled></textarea>
+            <button class="reset-code-button" id="resetCodeButton" type="button" disabled>Reset to Starter Code</button>
+            <p class="code-studio-message" id="codeStudioMessage">Connect USB before uploading code.</p>
+            <details class="compact-detail">
+                <summary>Code Status</summary>
+                <dl class="code-status-panel" aria-label="Code status">
+                    <div><dt>Sketch Name</dt><dd id="codeStatusSketch">Blink LED</dd></div>
+                    <div><dt>Edit State</dt><dd id="codeStatusEdited">Unedited</dd></div>
+                    <div><dt>Compile Status</dt><dd id="codeStatusCompile">Not Compiled</dd></div>
+                    <div><dt>Upload Status</dt><dd id="codeStatusUpload">Not Uploaded</dd></div>
+                    <div><dt>Detected Behavior</dt><dd id="codeStatusBehavior">None</dd></div>
+                </dl>
+            </details>
+            <button class="upload-code-button" id="uploadCodeButton" type="button" disabled>Upload</button>
+        </article>
+
+        <article class="control-card simulation-card" id="simulationCard">
+            <span class="card-kicker">Simulation</span>
+            <h2>Simulation Status</h2>
+            <p class="status-pill muted" id="simulationStatus">Not Running</p>
+            <div class="simulation-controls" aria-label="Arduino simulation controls">
+                <button class="simulation-button" id="startSimulationButton" type="button" disabled>Run Simulation</button>
+                <button class="simulation-button" id="stopSimulationButton" type="button" disabled>Stop Simulation</button>
+                <button class="simulation-button" id="resetSimulationButton" type="button">Reset Simulation</button>
+            </div>
+            <button class="virtual-button-control" id="virtualButtonControl" type="button" disabled>
+                Press Virtual Button
+            </button>
+            <div class="servo-control-panel" id="servoControlPanel" hidden>
+                <label for="servoAngleControl">Servo Angle: <span id="servoAngleValue">0°</span></label>
+                <input id="servoAngleControl" type="range" min="0" max="180" value="0" step="1" disabled>
+                <button class="oscilloscope-preview-button" id="viewServoPwmButton" type="button">
+                    View PWM Signal on Oscilloscope
+                </button>
+                <p id="servoPwmMessage" class="servo-pwm-message" hidden>
+                    Coming soon: this will open the oscilloscope connected to D9.
+                </p>
+            </div>
+            <div class="potentiometer-control-panel" id="potentiometerControlPanel" hidden>
+                <label for="potentiometerControl">Potentiometer Value: <span id="potentiometerValueLabel">0</span></label>
+                <input id="potentiometerControl" type="range" min="0" max="1023" value="0" step="1" disabled>
+                <p class="analog-voltage-readout">Voltage: <span id="potentiometerVoltageLabel">0.00V</span></p>
+            </div>
+            <div class="buzzer-control-panel" id="buzzerControlPanel" hidden>
+                <label for="buzzerFrequencyControl">Tone Frequency: <span id="buzzerFrequencyLabel">1000 Hz</span></label>
+                <input id="buzzerFrequencyControl" type="range" min="200" max="2000" value="1000" step="10" disabled>
+            </div>
+            <div class="ldr-control-panel" id="ldrControlPanel" hidden>
+                <label for="ldrLightControl">Light Level: <span id="ldrLightLabel">Medium</span></label>
+                <input id="ldrLightControl" type="range" min="0" max="2" value="1" step="1" disabled>
+                <div class="light-level-scale" aria-hidden="true">
+                    <span>Dark</span>
+                    <span>Medium</span>
+                    <span>Bright</span>
+                </div>
+            </div>
+            <div class="temperature-control-panel" id="temperatureControlPanel" hidden>
+                <label for="temperatureControl">Temperature: <span id="temperatureValueLabel">25°C</span></label>
+                <input id="temperatureControl" type="range" min="0" max="100" value="25" step="1" disabled>
+                <p class="analog-voltage-readout">Sensor Voltage: <span id="temperatureVoltageLabel">0.25V</span></p>
+            </div>
+            <div class="ultrasonic-control-panel" id="ultrasonicControlPanel" hidden>
+                <label for="ultrasonicDistanceControl">Distance: <span id="ultrasonicDistanceLabel">50cm</span></label>
+                <input id="ultrasonicDistanceControl" type="range" min="2" max="400" value="50" step="1" disabled>
+                <p class="analog-voltage-readout">Echo Duration: <span id="ultrasonicEchoLabel">2941 us</span></p>
+            </div>
+        </article>
+
+        <article class="control-card output-card" id="outputCard">
+            <span class="card-kicker">Output</span>
+            <h2>Output</h2>
+            <div class="output-tabs" role="tablist" aria-label="Output panel">
+                <button class="output-tab active" id="pinsOutputTab" type="button" data-output-tab="pins">Pins</button>
+                <button class="output-tab" id="serialOutputTab" type="button" data-output-tab="serial">Serial</button>
+            </div>
+            <div class="output-pane active" id="pinsOutputPane">
+                <dl class="simulation-live-status" aria-label="Pin states">
+                    <div><dt>Pin</dt><dd id="statusActivePin">None</dd></div>
+                    <div><dt>Mode</dt><dd id="statusCurrentSketch">None</dd></div>
+                    <div><dt>State</dt><dd id="statusPinState">N/A</dd></div>
+                    <div><dt>LED</dt><dd id="statusLedState">OFF</dd></div>
+                    <div><dt>Button</dt><dd id="statusButtonState">Released</dd></div>
+                    <div><dt>Buzzer</dt><dd id="statusBuzzerState">OFF</dd></div>
+                    <div><dt>Tone</dt><dd id="statusToneFrequency">N/A</dd></div>
+                    <div><dt>Analog</dt><dd id="statusAnalogValue">N/A</dd></div>
+                    <div><dt>Voltage</dt><dd id="statusVoltage">N/A</dd></div>
+                </dl>
+                <span id="statusLightLevel" hidden>N/A</span>
+                <span id="statusTemperature" hidden>N/A</span>
+                <span id="statusDistance" hidden>N/A</span>
+                <span id="statusEchoDuration" hidden>N/A</span>
+                <span id="statusServoAngle" hidden>N/A</span>
+                <span id="statusPwmSignal" hidden>Inactive</span>
+                <span id="statusServoPower" hidden>N/A</span>
+                <span id="statusServoGround" hidden>N/A</span>
+            </div>
+            <div class="output-pane" id="serialOutputPane">
+                <div class="serial-monitor-panel" aria-label="Serial monitor">
+                    <div class="serial-monitor-header">
+                        <strong>Serial</strong>
+                        <button id="clearSerialButton" type="button">Clear</button>
+                    </div>
+                    <pre class="serial-monitor-output" id="serialMonitorOutput">Serial output will appear here.</pre>
+                </div>
+            </div>
+        </article>
+
+        <article class="control-card free-build-help-card" id="freeBuildHelpCard" hidden>
+            <span class="card-kicker">Free Build</span>
+            <h2>Sandbox</h2>
+            <p>Add parts from the toolbox, click two connection points to draw a wire, then connect USB and run your sketch.</p>
+            <p class="free-build-save-status" id="freeBuildSaveStatus">No Saved Build</p>
+            <p class="free-build-wire-status" id="freeBuildWireStatus">No manual wires yet.</p>
+        </article>
+
+        <article class="control-card workspace-controls-card" id="workspaceControlsCard">
+            <span class="card-kicker">Workspace</span>
+            <h2>Controls</h2>
+            <button class="save-free-build-button" id="saveFreeBuildButton" type="button">Save Free Build</button>
+            <button class="load-free-build-button" id="loadFreeBuildButton" type="button">Load Saved Build</button>
+            <button class="clear-free-build-button" id="clearFreeBuildButton" type="button">Clear Free Build</button>
+            <button class="back-to-lessons-action-button" id="backToLessonsActionButton" type="button">← Back to Lessons</button>
+            <div class="free-build-confirm" id="clearFreeBuildDialog" hidden role="dialog" aria-labelledby="clearFreeBuildTitle">
+                <strong id="clearFreeBuildTitle">Clear Free Build?</strong>
+                <p>Your current Free Build workspace will be cleared.</p>
+                <div class="free-build-confirm-actions">
+                    <button type="button" id="confirmClearFreeBuildButton">Clear</button>
+                    <button type="button" id="cancelClearFreeBuildButton">Cancel</button>
+                </div>
+            </div>
+            <button class="clear-workbench-button" id="clearWorkbenchButton" type="button">Clear Workspace</button>
+            <button class="reset-workspace-button" id="resetWorkspaceButton" type="button">Reset Workspace</button>
+        </article>
+    </aside>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/arduino.js') }}?v=arduino-free-build-save-1"></script>
+{% endblock %}
