@@ -4,7 +4,7 @@ from flask import Flask
 
 from assessments.routes import assessments_bp
 from backend.routes import backend_bp
-from database.connection import close_db, init_db_command
+from database.connection import close_db, ensure_db_initialized, init_db_command
 from simulations.routes import simulations_bp
 from tutorials.routes import tutorials_bp
 
@@ -30,6 +30,11 @@ def create_app():
     # Register database cleanup and setup commands.
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+
+    # Render may start with a brand-new SQLite file. Ensure the base schema
+    # exists before any request, especially login, can query the users table.
+    with app.app_context():
+        ensure_db_initialized()
 
     return app
 

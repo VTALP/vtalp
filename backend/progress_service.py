@@ -5,7 +5,7 @@ progress pages, simulations, tutorials, and assessments do not duplicate SQL.
 """
 
 from backend.device_catalog import CORE_DEVICES
-from database.connection import get_db
+from database.connection import ensure_db_initialized, get_db
 
 
 DEVICE_SLUGS = [device["slug"] for device in CORE_DEVICES]
@@ -45,6 +45,7 @@ COMPONENT_TOTALS = {
 
 def ensure_progress_tables():
     """Create progress tables for existing databases that predate this module."""
+    ensure_db_initialized()
     db = get_db()
     db.executescript(
         """
@@ -117,6 +118,7 @@ def ensure_progress_tables():
         );
         """
     )
+    db.commit()
 
 
 def record_simulation_opened(user_id, device_slug):

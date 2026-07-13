@@ -6,11 +6,12 @@ students, while users promoted to instructor or admin can view this dashboard.
 """
 
 from backend.device_catalog import CORE_DEVICES
-from database.connection import get_db
+from database.connection import ensure_db_initialized, get_db
 
 
 def ensure_instructor_tables():
     """Create instructor-related fields/tables for new and existing databases."""
+    ensure_db_initialized()
     db = get_db()
 
     try:

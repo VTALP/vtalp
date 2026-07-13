@@ -1,3 +1,4 @@
+import os
 import sqlite3
 from pathlib import Path
 
@@ -6,13 +7,15 @@ from flask import g
 
 
 BASE_DIR = Path(__file__).resolve().parent
-DATABASE_PATH = BASE_DIR / "vtalp.sqlite3"
+DATABASE_PATH = Path(os.environ.get("DATABASE_PATH", BASE_DIR / "vtalp.sqlite3"))
 SCHEMA_PATH = BASE_DIR / "schema.sql"
+_SCHEMA_INITIALIZED = False
 
 
 def get_db():
     """Open one SQLite connection for the current web request."""
     if "db" not in g:
+        DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
         g.db = sqlite3.connect(DATABASE_PATH)
         g.db.row_factory = sqlite3.Row
 
@@ -33,6 +36,18 @@ def init_db():
 
     with open(SCHEMA_PATH, "r", encoding="utf-8") as schema_file:
         db.executescript(schema_file.read())
+    db.commit()
+
+
+def ensure_db_initialized():
+    """Create the SQLite schema once per process without replacing existing data."""
+    global _SCHEMA_INITIALIZED
+
+    if _SCHEMA_INITIALIZED:
+        return
+
+    init_db()
+    _SCHEMA_INITIALIZED = True
 
 
 @click.command("init-db")

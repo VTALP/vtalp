@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: vtalp
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: flask --app app init-db && gunicorn app:app
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_PATH
+        value: /var/data/vtalp.sqlite3
+    disk:
+      name: vtalp-data
+      mountPath: /var/data
+      sizeGB: 1
