@@ -1,12 +1,14 @@
 .progress-page {
     display: grid;
     gap: 20px;
+    min-width: 0;
 }
 
 .overall-grid {
     display: grid;
     gap: 16px;
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    min-width: 0;
 }
 
 .overall-grid article,
@@ -16,6 +18,7 @@
     background: #ffffff;
     border: 1px solid #d8e5ec;
     border-radius: 8px;
+    min-width: 0;
     padding: 20px;
 }
 
@@ -65,11 +68,13 @@
 .device-progress-list {
     display: grid;
     gap: 18px;
+    min-width: 0;
 }
 
 .progress-device-card {
     display: grid;
     gap: 16px;
+    width: 100%;
 }
 
 .device-card-heading {
@@ -98,12 +103,14 @@
     display: grid;
     gap: 14px;
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    min-width: 0;
 }
 
 .status-grid div {
     background: #f8fafc;
     border: 1px solid #e2e8f0;
     border-radius: 8px;
+    min-width: 0;
     padding: 14px;
 }
 
@@ -128,6 +135,7 @@
     gap: 14px;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     margin-top: 18px;
+    min-width: 0;
 }
 
 .achievement-card {
@@ -177,6 +185,7 @@
     display: grid;
     gap: 18px;
     grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    min-width: 0;
 }
 
 .action-list {
@@ -270,4 +279,51 @@
         flex-direction: column;
     }
 
+}
+
+@media (max-width: 768px) {
+    .progress-page {
+        gap: 18px;
+    }
+
+    .overall-grid {
+        gap: 12px;
+    }
+
+    .overall-grid article,
+    .overall-bar-card,
+    .progress-device-card,
+    .progress-section-card {
+        padding: 18px;
+        width: 100%;
+    }
+
+    .overall-grid strong {
+        font-size: 1.45rem;
+    }
+
+    .device-card-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .status-grid {
+        gap: 12px;
+    }
+
+    .status-grid strong,
+    .achievement-card h3,
+    .learning-timeline strong {
+        overflow-wrap: break-word;
+    }
+
+    .achievement-card {
+        grid-template-columns: 38px minmax(0, 1fr);
+        padding: 14px;
+    }
+
+    .achievement-icon {
+        height: 36px;
+        width: 36px;
+    }
 }
