@@ -1,15 +1,61 @@
 <aside class="dashboard-sidebar" id="dashboardSidebar" aria-label="Dashboard navigation">
-    <a class="sidebar-brand" href="{{ url_for('backend.dashboard') }}">
-        <span class="brand-mark">V</span>
-        <span>VTALP</span>
-    </a>
+    <button class="sidebar-close" type="button" data-sidebar-close aria-label="Close dashboard navigation">
+        <span aria-hidden="true">&times;</span>
+    </button>
 
     <nav class="sidebar-nav">
-        <a class="{% if request.endpoint == 'backend.dashboard' %}active{% endif %}" href="{{ url_for('backend.dashboard') }}">Dashboard</a>
-        <a class="{% if request.blueprint == 'simulations' %}active{% endif %}" href="{{ url_for('simulations.simulation_home') }}">Simulations</a>
-        <a class="{% if request.blueprint == 'tutorials' %}active{% endif %}" href="{{ url_for('tutorials.tutorial_home') }}">Tutorials</a>
-        <a class="{% if request.blueprint == 'assessments' %}active{% endif %}" href="{{ url_for('assessments.assessment_home') }}">Assessments</a>
-        <a class="{% if request.endpoint == 'backend.progress' %}active{% endif %}" href="{{ url_for('backend.progress') }}">Progress</a>
-        <a href="{{ url_for('backend.logout') }}">Logout</a>
+        <a class="{% if request.blueprint == 'tutorials' %}active{% endif %}" href="{{ url_for('tutorials.tutorial_home') }}">
+            <span class="sidebar-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false">
+                    <path d="M5 4.5h5.2c1 0 1.8.8 1.8 1.8v13.2c0-1-0.8-1.8-1.8-1.8H5V4.5Z"></path>
+                    <path d="M19 4.5h-5.2c-1 0-1.8.8-1.8 1.8v13.2c0-1 .8-1.8 1.8-1.8H19V4.5Z"></path>
+                </svg>
+            </span>
+            <span>Tutorials</span>
+        </a>
+        <a class="{% if request.blueprint == 'simulations' %}active{% endif %}" href="{{ url_for('simulations.simulation_home') }}">
+            <span class="sidebar-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false">
+                    <rect x="4" y="5" width="16" height="10" rx="2"></rect>
+                    <path d="M8 19h8"></path>
+                    <path d="M12 15v4"></path>
+                    <path d="M8 11c1.2-3 2.7-3 4 0s2.8 3 4 0"></path>
+                </svg>
+            </span>
+            <span>Simulations</span>
+        </a>
+        <a class="{% if request.blueprint == 'assessments' %}active{% endif %}" href="{{ url_for('assessments.assessment_home') }}">
+            <span class="sidebar-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false">
+                    <path d="M8 4h8l2 2v14H6V6l2-2Z"></path>
+                    <path d="M9 10h6"></path>
+                    <path d="M9 14h3"></path>
+                    <path d="M15 14l1.3 1.3L19 12.5"></path>
+                </svg>
+            </span>
+            <span>Assessments</span>
+        </a>
+        <a class="{% if request.endpoint == 'backend.progress' %}active{% endif %}" href="{{ url_for('backend.progress') }}">
+            <span class="sidebar-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false">
+                    <path d="M5 19V5"></path>
+                    <path d="M5 19h14"></path>
+                    <rect x="8" y="12" width="2.8" height="4"></rect>
+                    <rect x="12" y="9" width="2.8" height="7"></rect>
+                    <rect x="16" y="6" width="2.8" height="10"></rect>
+                </svg>
+            </span>
+            <span>Progress</span>
+        </a>
+        <a class="sidebar-logout" href="{{ url_for('backend.logout') }}">
+            <span class="sidebar-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false">
+                    <path d="M10 5H6v14h4"></path>
+                    <path d="M13 12h7"></path>
+                    <path d="M17 8l4 4-4 4"></path>
+                </svg>
+            </span>
+            <span>Logout</span>
+        </a>
     </nav>
 </aside>

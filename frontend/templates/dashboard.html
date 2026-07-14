@@ -1,35 +1,32 @@
 {% extends "base.html" %}
 
+{% block body_class %}dashboard-page {% if sidebar_expanded %}dashboard-expanded{% else %}dashboard-welcome{% endif %}{% endblock %}
+
 {% block extra_head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="dashboard-shell">
+<div class="dashboard-backdrop" data-dashboard-backdrop hidden></div>
+<div class="dashboard-shell {% if sidebar_expanded %}sidebar-expanded{% else %}sidebar-hidden{% endif %}" data-dashboard-shell data-sidebar-default="{% if sidebar_expanded %}expanded{% else %}welcome{% endif %}">
     {% include "_dashboard_sidebar.html" %}
 
     <section class="dashboard-main">
-        <header class="dashboard-topbar">
-            <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-controls="dashboardSidebar" aria-expanded="false">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+        <header class="dashboard-topbar" data-dashboard-reveal>
             <div>
-                <p class="dashboard-kicker">Dashboard</p>
                 <h1>Welcome back, {{ full_name }}.</h1>
                 <p class="dashboard-subtitle">Choose a module and continue learning at your own pace.</p>
             </div>
         </header>
 
-        <section class="overview-panel" aria-label="Dashboard overview">
+        <section class="overview-panel" aria-label="Dashboard overview" data-dashboard-reveal>
             <div>
                 <p class="dashboard-kicker">Overall Progress Summary</p>
                 <h2>{{ overall_completion }}% complete</h2>
                 <p>Detailed analytics, milestones, and recent learning events are available on the Progress page.</p>
             </div>
-            <div class="completion-ring large-ring" style="--progress: {{ overall_completion }}%" aria-label="Overall completion {{ overall_completion }} percent">
-                <span>{{ overall_completion }}%</span>
+            <div class="completion-ring large-ring" style="--progress: {{ overall_completion }}%" data-progress-ring data-progress="{{ overall_completion }}" aria-label="Overall completion {{ overall_completion }} percent">
+                <span data-progress-value>{{ overall_completion }}%</span>
             </div>
         </section>
 
@@ -41,22 +38,22 @@
                 </div>
             </div>
             <div class="learning-flow-grid">
-                <a href="{{ url_for('tutorials.tutorial_home') }}">
+                <a href="{{ url_for('tutorials.tutorial_home') }}" data-dashboard-reveal>
                     <span>Step 1</span>
                     <strong>Start with Tutorial</strong>
                     <p>Learn the device, safety rules, controls, and beginner concepts.</p>
                 </a>
-                <a href="{{ url_for('simulations.simulation_home') }}">
+                <a href="{{ url_for('simulations.simulation_home') }}" data-dashboard-reveal>
                     <span>Step 2</span>
                     <strong>Practice in Simulation</strong>
                     <p>Use the virtual lab after reviewing the tutorial.</p>
                 </a>
-                <a href="{{ url_for('assessments.assessment_home') }}">
+                <a href="{{ url_for('assessments.assessment_home') }}" data-dashboard-reveal>
                     <span>Step 3</span>
                     <strong>Take Assessment</strong>
                     <p>Check understanding after guided practice.</p>
                 </a>
-                <a href="{{ url_for('backend.progress') }}">
+                <a href="{{ url_for('backend.progress') }}" data-dashboard-reveal>
                     <span>Step 4</span>
                     <strong>Check Progress</strong>
                     <p>Review analytics, milestones, and recent learning activity.</p>
@@ -74,14 +71,14 @@
 
             <div class="instrument-grid">
                 {% for device in dashboard_devices %}
-                <article class="instrument-card">
+                <article class="instrument-card" data-dashboard-reveal>
                     <div class="instrument-card-top">
                         <div>
                             <span class="device-category">{{ device.category }}</span>
                             <h3>{{ device.name }}</h3>
                         </div>
-                        <div class="completion-ring small-ring" style="--progress: {{ device.completion_percentage }}%" aria-label="{{ device.name }} completion {{ device.completion_percentage }} percent">
-                            <span>{{ device.completion_percentage }}%</span>
+                        <div class="completion-ring small-ring" style="--progress: {{ device.completion_percentage }}%" data-progress-ring data-progress="{{ device.completion_percentage }}" aria-label="{{ device.name }} completion {{ device.completion_percentage }} percent">
+                            <span data-progress-value>{{ device.completion_percentage }}%</span>
                         </div>
                     </div>
                     <div class="instrument-content">
@@ -96,7 +93,7 @@
             </div>
         </section>
 
-        <section class="continue-learning" aria-label="Continue learning">
+        <section class="continue-learning" aria-label="Continue learning" data-dashboard-reveal>
             <p>Need tutorials, assessments, or detailed analytics? Use the sidebar to open the full learning areas.</p>
             <a class="dash-button secondary-action" href="{{ url_for('backend.progress') }}">View Progress Details</a>
         </section>

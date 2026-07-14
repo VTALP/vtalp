@@ -64,24 +64,33 @@ def home():
 @backend_bp.route("/register", methods=("GET", "POST"))
 def register():
     """Create a learner account and store it in SQLite."""
+    form_data = {"full_name": "", "email": ""}
+    focus_field = None
+
     if request.method == "POST":
         full_name = request.form.get("full_name", "").strip()
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
         confirm_password = request.form.get("confirm_password", "")
         error = None
+        form_data = {"full_name": full_name, "email": email}
 
         # Validate the form before saving anything to the database.
         if not full_name:
             error = "Full name is required."
+            focus_field = "full_name"
         elif not email:
             error = "Email address is required."
+            focus_field = "email"
         elif not password:
             error = "Password is required."
+            focus_field = "password"
         elif len(password) < 6:
             error = "Password must be at least 6 characters long."
+            focus_field = "password"
         elif password != confirm_password:
             error = "Passwords do not match."
+            focus_field = "password"
 
         ensure_instructor_tables()
         db = get_db()
@@ -92,6 +101,7 @@ def register():
 
         if error is None and existing_user is not None:
             error = "An account with this email already exists."
+            focus_field = "email"
 
         if error is None:
             password_hash = generate_password_hash(password)
@@ -109,17 +119,26 @@ def register():
 
         flash(error, "error")
 
-    return render_template("register.html", title="Register")
+    return render_template(
+        "register.html",
+        title="Register",
+        form_data=form_data,
+        focus_field=focus_field,
+    )
 
 
 @backend_bp.route("/login", methods=("GET", "POST"))
 def login():
     """Verify a learner's email and password, then start a session."""
     ensure_instructor_tables()
+    form_data = {"email": ""}
+    focus_field = None
+
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
         error = None
+        form_data = {"email": email}
 
         db = get_db()
         user = db.execute(
@@ -129,12 +148,16 @@ def login():
 
         if not email:
             error = "Email address is required."
+            focus_field = "email"
         elif not password:
             error = "Password is required."
+            focus_field = "password"
         elif user is None:
-            error = "Invalid email or password."
+            error = "Email not registered."
+            focus_field = "email"
         elif not check_password_hash(user["password_hash"], password):
-            error = "Invalid email or password."
+            error = "Invalid password."
+            focus_field = "password"
 
         if error is None:
             # Clear any old session data before storing the logged-in user.
@@ -148,11 +171,16 @@ def login():
             flash("Login successful.", "success")
             if session["role"] in ("instructor", "admin"):
                 return redirect(url_for("backend.instructor_dashboard"))
-            return redirect(url_for("backend.dashboard"))
+            return redirect(url_for("backend.dashboard", view="welcome"))
 
         flash(error, "error")
 
-    return render_template("login.html", title="Login")
+    return render_template(
+        "login.html",
+        title="Login",
+        form_data=form_data,
+        focus_field=focus_field,
+    )
 
 
 @backend_bp.route("/logout")
@@ -167,6 +195,7 @@ def logout():
 @login_required
 def dashboard():
     """Display the protected dashboard for VTALP's three core learning devices."""
+    sidebar_expanded = request.args.get("view", "welcome") == "expanded"
     # Device cards come from one shared catalog so simulations, tutorials,
     # assessments, and progress tracking can reuse the same device structure.
     instruments = build_dashboard_devices(url_for)
@@ -188,6 +217,7 @@ def dashboard():
         dashboard_devices=dashboard_devices,
         overall_completion=summary["overall_completion"],
         summary=summary,
+        sidebar_expanded=sidebar_expanded,
     )
 
 

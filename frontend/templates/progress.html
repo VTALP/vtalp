@@ -1,21 +1,19 @@
 {% extends "base.html" %}
 
+{% block body_class %}dashboard-page progress-body{% endblock %}
+
 {% block extra_head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/progress.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="dashboard-shell">
+<div class="dashboard-backdrop" data-dashboard-backdrop hidden></div>
+<div class="dashboard-shell sidebar-expanded" data-dashboard-shell data-sidebar-default="expanded">
     {% include "_dashboard_sidebar.html" %}
 
     <section class="dashboard-main progress-page">
         <header class="dashboard-topbar">
-            <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-controls="dashboardSidebar" aria-expanded="false">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
             <div>
                 <p class="dashboard-kicker">Step 4</p>
                 <h1>Your VTALP Progress</h1>

@@ -7,30 +7,48 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     {% block extra_head %}{% endblock %}
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
     <header class="site-header">
         <nav class="nav">
             <a class="brand" href="{{ url_for('backend.home') }}">VTALP</a>
             {% block primary_navigation %}
+                {% set sidebar_endpoints = [
+                    "backend.dashboard",
+                    "backend.progress",
+                    "simulations.simulation_home",
+                    "tutorials.tutorial_home",
+                    "assessments.assessment_home",
+                ] %}
+                {% set sidebar_route = request.endpoint in sidebar_endpoints %}
+                {% set sidebar_open = sidebar_route and not (request.endpoint == "backend.dashboard" and request.args.get("view", "welcome") != "expanded") %}
                 <div class="nav-links">
                     {# The top navbar is intentionally kept small. Learning-area links live in the dashboard sidebar. #}
-                    <a href="{{ url_for('backend.home') }}">Home</a>
+                    {% if request.endpoint != "backend.home" %}
+                        <a href="{{ url_for('backend.home') }}">Home</a>
+                    {% endif %}
                     {% if session.get("user_id") %}
-                        {% if request.endpoint not in [
-                            "backend.dashboard",
-                            "backend.progress",
-                            "simulations.simulation_home",
-                            "tutorials.tutorial_home",
-                            "assessments.assessment_home",
-                        ] %}
-                        <a href="{{ url_for('backend.dashboard') }}">Dashboard</a>
+                        {% if sidebar_route %}
+                        <button
+                            class="nav-dashboard-trigger"
+                            type="button"
+                            data-dashboard-trigger
+                            aria-controls="dashboardSidebar"
+                            aria-expanded="{% if sidebar_open %}true{% else %}false{% endif %}"
+                            {% if sidebar_open %}hidden{% endif %}
+                        >Dashboard</button>
+                        {% elif request.endpoint != "backend.dashboard" %}
+                        <a href="{{ url_for('backend.dashboard', view='expanded') }}">Dashboard</a>
                         {% endif %}
                         {% if session.get("role") in ["instructor", "admin"] %}
                             <a href="{{ url_for('backend.instructor_dashboard') }}">Instructor</a>
                         {% endif %}
                     {% else %}
+                        {% if request.endpoint != "backend.login" %}
                         <a href="{{ url_for('backend.login') }}">Login</a>
+                        {% endif %}
+                        {% if request.endpoint != "backend.register" %}
                         <a href="{{ url_for('backend.register') }}">Register</a>
+                        {% endif %}
                     {% endif %}
                 </div>
             {% endblock %}

@@ -1,36 +1,166 @@
 {% extends "base.html" %}
 
+{% block body_class %}homepage{% endblock %}
+
 {% block content %}
 <section class="hero">
-    <div class="hero-content">
-        <p class="eyebrow">Computer Science Final Year Project</p>
-        <h1>Virtual Technology Access and Learning Platform</h1>
-        <p class="hero-text">
-            Learn, practice, and assess technical instrument skills through web-based simulations.
-        </p>
-        <div class="hero-actions">
-            <a class="button primary" href="{{ url_for('simulations.simulation_home') }}">Start Simulation</a>
-            <a class="button secondary" href="{{ url_for('tutorials.tutorial_home') }}">View Tutorials</a>
+    <div class="hero-background" aria-hidden="true"></div>
+    <div class="hero-content hero-layout">
+        <div class="hero-copy">
+            <h1 class="hero-title">
+                Virtual Technology Access and <span class="title-highlight">Learning Platform</span>
+            </h1>
+            <p class="hero-text">
+                Learn, practice, and assess technical instrument skills through web-based simulations.
+            </p>
+            <div class="hero-actions">
+                <a class="button secondary hero-button" href="{{ url_for('tutorials.tutorial_home') }}">View Tutorials</a>
+                <a class="button primary hero-button" href="{{ url_for('simulations.simulation_home') }}">Start Simulation</a>
+            </div>
+        </div>
+        <div class="hero-illustration" aria-hidden="true">
+            <svg viewBox="0 0 520 360" role="img">
+                <defs>
+                    <linearGradient id="screenGradient" x1="0%" x2="100%" y1="0%" y2="100%">
+                        <stop offset="0%" stop-color="#0f766e"></stop>
+                        <stop offset="100%" stop-color="#1864ab"></stop>
+                    </linearGradient>
+                    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#172033" flood-opacity="0.14"></feDropShadow>
+                    </filter>
+                </defs>
+                <g filter="url(#softShadow)">
+                    <rect x="210" y="42" width="220" height="145" rx="16" fill="#ffffff" stroke="#d9e2ec" stroke-width="3"></rect>
+                    <rect x="232" y="64" width="176" height="84" rx="10" fill="#eaf6ff"></rect>
+                    <path d="M244 118 C270 74 296 158 322 108 S372 92 394 116" fill="none" stroke="url(#screenGradient)" stroke-width="5" stroke-linecap="round"></path>
+                    <line x1="245" y1="162" x2="395" y2="162" stroke="#d9e2ec" stroke-width="4" stroke-linecap="round"></line>
+                    <circle cx="250" cy="176" r="5" fill="#1864ab"></circle>
+                    <circle cx="272" cy="176" r="5" fill="#0f766e"></circle>
+                    <circle cx="294" cy="176" r="5" fill="#5d6b82"></circle>
+                </g>
+                <g filter="url(#softShadow)">
+                    <rect x="58" y="88" width="130" height="190" rx="22" fill="#172033"></rect>
+                    <rect x="80" y="116" width="86" height="42" rx="8" fill="#dff7ee"></rect>
+                    <text x="123" y="144" text-anchor="middle" font-size="22" font-weight="700" fill="#0f766e">9.00V</text>
+                    <circle cx="123" cy="211" r="42" fill="#2d3748"></circle>
+                    <circle cx="123" cy="211" r="20" fill="#4a5568"></circle>
+                    <line x1="84" y1="302" x2="64" y2="336" stroke="#172033" stroke-width="5" stroke-linecap="round"></line>
+                    <line x1="162" y1="302" x2="184" y2="336" stroke="#dc2626" stroke-width="5" stroke-linecap="round"></line>
+                </g>
+                <g filter="url(#softShadow)">
+                    <rect x="272" y="218" width="168" height="96" rx="18" fill="#00878f"></rect>
+                    <rect x="294" y="236" width="64" height="44" rx="8" fill="#172033"></rect>
+                    <rect x="374" y="235" width="36" height="54" rx="5" fill="#e2e8f0"></rect>
+                    <circle cx="294" cy="298" r="8" fill="#ffffff" opacity="0.75"></circle>
+                    <circle cx="418" cy="238" r="8" fill="#ffffff" opacity="0.75"></circle>
+                    <g fill="#f8fafc">
+                        <rect x="286" y="212" width="8" height="18" rx="2"></rect>
+                        <rect x="304" y="212" width="8" height="18" rx="2"></rect>
+                        <rect x="322" y="212" width="8" height="18" rx="2"></rect>
+                        <rect x="340" y="212" width="8" height="18" rx="2"></rect>
+                        <rect x="358" y="212" width="8" height="18" rx="2"></rect>
+                        <rect x="376" y="212" width="8" height="18" rx="2"></rect>
+                        <rect x="394" y="212" width="8" height="18" rx="2"></rect>
+                        <rect x="412" y="212" width="8" height="18" rx="2"></rect>
+                    </g>
+                </g>
+            </svg>
         </div>
     </div>
 </section>
 
+<section class="stats-strip" aria-label="Platform highlights">
+    <div class="stat-item" data-reveal-item>
+        <strong>3</strong>
+        <span>Interactive Instruments</span>
+    </div>
+    <div class="stat-item" data-reveal-item>
+        <strong>Guided</strong>
+        <span>Learning Modules</span>
+    </div>
+    <div class="stat-item" data-reveal-item>
+        <strong>Hands-on</strong>
+        <span>Virtual Practice</span>
+    </div>
+    <div class="stat-item" data-reveal-item>
+        <strong>Anytime</strong>
+        <span>Learn Anywhere</span>
+    </div>
+</section>
+
 <section class="features" aria-label="Platform features">
-    <article class="feature-card">
+    <article class="feature-card" data-feature-card>
+        <span class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+                <path d="M5 19h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-5l-2-2H5a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2Z"></path>
+                <path d="M7 14h3l2-4 2 6 2-4h1"></path>
+            </svg>
+        </span>
         <h2>Interactive Simulations</h2>
         <p>Practice with virtual versions of a Digital Multimeter, Oscilloscope, and Arduino Trainer.</p>
     </article>
-    <article class="feature-card">
+    <article class="feature-card" data-feature-card>
+        <span class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+                <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5v-16Z"></path>
+                <path d="M8 7h8"></path>
+                <path d="M8 11h7"></path>
+            </svg>
+        </span>
         <h2>Guided Tutorials</h2>
         <p>Follow structured lessons before attempting practical simulation activities.</p>
     </article>
-    <article class="feature-card">
+    <article class="feature-card" data-feature-card>
+        <span class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+                <path d="M9 6h11"></path>
+                <path d="M9 12h11"></path>
+                <path d="M9 18h11"></path>
+                <path d="m4 6 1 1 2-2"></path>
+                <path d="m4 12 1 1 2-2"></path>
+                <path d="m4 18 1 1 2-2"></path>
+            </svg>
+        </span>
         <h2>Assessments</h2>
         <p>Take quizzes and practical tests to measure understanding and skill growth.</p>
     </article>
-    <article class="feature-card">
+    <article class="feature-card" data-feature-card>
+        <span class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+                <path d="M4 19V5"></path>
+                <path d="M4 19h16"></path>
+                <path d="M8 16v-4"></path>
+                <path d="M12 16V8"></path>
+                <path d="M16 16v-6"></path>
+            </svg>
+        </span>
         <h2>Progress Tracking</h2>
         <p>Monitor completed lessons, simulation practice, and assessment performance.</p>
     </article>
+</section>
+
+<section class="how-it-works" aria-labelledby="how-vtalp-works">
+    <div class="section-heading">
+        <h2 id="how-vtalp-works">How VTALP Works</h2>
+    </div>
+    <div class="journey-steps">
+        <article class="journey-card" data-reveal-item>
+            <span class="journey-number">1</span>
+            <h3>Learn</h3>
+            <p>Read structured tutorials and understand the concepts behind each instrument.</p>
+        </article>
+        <span class="journey-connector" aria-hidden="true"></span>
+        <article class="journey-card" data-reveal-item>
+            <span class="journey-number">2</span>
+            <h3>Practice</h3>
+            <p>Use interactive simulations to gain practical experience in a virtual environment.</p>
+        </article>
+        <span class="journey-connector" aria-hidden="true"></span>
+        <article class="journey-card" data-reveal-item>
+            <span class="journey-number">3</span>
+            <h3>Assess</h3>
+            <p>Complete quizzes and practical assessments to evaluate understanding and track progress.</p>
+        </article>
+    </div>
 </section>
 {% endblock %}

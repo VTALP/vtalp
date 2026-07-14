@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 
+{% block body_class %}auth-page register-page{% endblock %}
+
 {% block content %}
 <section class="auth-section">
+    <div class="auth-background" aria-hidden="true"></div>
     <div class="auth-panel">
         <div class="auth-copy">
             <p class="eyebrow">Create Account</p>
@@ -10,17 +13,56 @@
         </div>
 
         <form class="auth-form" method="post" action="{{ url_for('backend.register') }}">
-            <label for="full_name">Full name</label>
-            <input id="full_name" name="full_name" type="text" autocomplete="name" required>
+            <div class="auth-field">
+                <label for="full_name">Full name</label>
+                <input
+                    id="full_name"
+                    name="full_name"
+                    type="text"
+                    autocomplete="name"
+                    value="{{ form_data.full_name|default('', true) }}"
+                    {% if focus_field == "full_name" %}autofocus data-error-focus="true"{% endif %}
+                    required
+                >
+            </div>
 
-            <label for="email">Email address</label>
-            <input id="email" name="email" type="email" autocomplete="email" required>
+            <div class="auth-field">
+                <label for="email">Email address</label>
+                <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autocomplete="email"
+                    value="{{ form_data.email|default('', true) }}"
+                    {% if focus_field == "email" %}autofocus data-error-focus="true"{% endif %}
+                    required
+                >
+            </div>
 
-            <label for="password">Password</label>
-            <input id="password" name="password" type="password" autocomplete="new-password" minlength="6" required>
+            <div class="auth-field">
+                <label for="password">Password</label>
+                <div class="password-control">
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        autocomplete="new-password"
+                        minlength="6"
+                        {% if focus_field == "password" %}autofocus data-error-focus="true"{% endif %}
+                        required
+                    >
+                    <button class="password-toggle" type="button" aria-label="Show password" aria-controls="password">Show</button>
+                </div>
+            </div>
 
-            <label for="confirm_password">Confirm password</label>
-            <input id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" minlength="6" required>
+            <div class="auth-field">
+                <label for="confirm_password">Confirm password</label>
+                <div class="password-control">
+                    <input id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" minlength="6" required>
+                    <button class="password-toggle" type="button" aria-label="Show confirm password" aria-controls="confirm_password">Show</button>
+                </div>
+                <p class="password-match-message" data-password-match-message aria-live="polite"></p>
+            </div>
 
             <button class="button primary form-button" type="submit">Create Account</button>
 
