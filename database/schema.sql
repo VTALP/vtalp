@@ -1,4 +1,4 @@
--- Starter SQLite schema for VTALP.
+-- Starter SQLite schema for SimLearn.
 -- This file can be expanded as authentication, simulations, and assessments grow.
 
 CREATE TABLE IF NOT EXISTS users (
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS assessment_results (
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
--- Progress tracking tables for the three VTALP core devices.
+-- Progress tracking tables for the three SimLearn core devices.
 -- These tables are user-specific and can support more devices later by storing
 -- the device slug instead of hard-coding separate tables per instrument.
 
@@ -98,3 +98,4 @@ CREATE TABLE IF NOT EXISTS user_progress (
     UNIQUE (user_id, device_slug),
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
+

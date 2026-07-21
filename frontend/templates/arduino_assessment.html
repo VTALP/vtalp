@@ -30,7 +30,7 @@
 
     <form class="assessment-form" id="assessmentForm">
         <fieldset data-answer="controller">
-            <legend>1. What is the main purpose of the Arduino Uno in the VTALP lab?</legend>
+            <legend>1. What is the main purpose of the Arduino Uno in the SimLearn lab?</legend>
             <label><input type="radio" name="q1" value="controller"> To run uploaded code, read inputs, and control outputs</label>
             <label><input type="radio" name="q1" value="display"> To display oscilloscope waveforms only</label>
             <label><input type="radio" name="q1" value="battery"> To work only as a battery</label>
@@ -118,7 +118,7 @@
         </fieldset>
 
         <fieldset data-answer="trigD7EchoD6">
-            <legend>12. Which pins are used by the ultrasonic sensor in the VTALP Arduino Lab?</legend>
+            <legend>12. Which pins are used by the ultrasonic sensor in the SimLearn Arduino Lab?</legend>
             <label><input type="radio" name="q12" value="trigD7EchoD6"> TRIG on D7 and ECHO on D6</label>
             <label><input type="radio" name="q12" value="servoD9Only"> Signal on D9 only</label>
             <label><input type="radio" name="q12" value="a0A1"> A0 and A1</label>
@@ -134,3 +134,4 @@
 {% block extra_scripts %}
 <script src="{{ url_for('static', filename='js/assessment.js') }}"></script>
 {% endblock %}
+

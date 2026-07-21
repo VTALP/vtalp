@@ -1,4 +1,4 @@
-"""User progress helpers for VTALP.
+"""User progress helpers for SimLearn.
 
 The functions here keep progress calculation in one place so dashboard,
 progress pages, simulations, tutorials, and assessments do not duplicate SQL.
@@ -336,7 +336,7 @@ def refresh_user_device_progress(user_id, device_slug):
 
 
 def get_user_progress(user_id, url_for=None):
-    """Return dashboard-ready progress data for all core VTALP devices."""
+    """Return dashboard-ready progress data for all core SimLearn devices."""
     ensure_progress_tables()
     db = get_db()
     rows = {
@@ -620,3 +620,4 @@ def build_achievement_badges(device_progress):
             ),
         },
     ]
+

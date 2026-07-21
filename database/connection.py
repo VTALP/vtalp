@@ -54,4 +54,5 @@ def ensure_db_initialized():
 def init_db_command():
     """Flask command used to create the starter SQLite database."""
     init_db()
-    click.echo("Initialized the VTALP SQLite database.")
+    click.echo("Initialized the SimLearn SQLite database.")
+

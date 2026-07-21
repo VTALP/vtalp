@@ -1,11 +1,11 @@
-# Virtual Technology Access and Learning Platform (VTALP)
+# SimLearn (SimLearn)
 
-VTALP is a beginner-friendly Flask web application for learning and interacting with virtual technology instruments such as a Digital Multimeter, Oscilloscope, and Arduino Trainer.
+SimLearn is a beginner-friendly Flask web application for learning and interacting with virtual technology instruments such as a Digital Multimeter, Oscilloscope, and Arduino Trainer.
 
 ## Project Structure
 
 ```text
-VTALP/
+SimLearn/
 ├── app.py
 ├── requirements.txt
 ├── README.md
@@ -48,14 +48,14 @@ VTALP/
 - `requirements.txt`: Lists the Python packages needed to run the project.
 - `README.md`: Explains the project setup, structure, and local run steps.
 - `backend/`: Holds the main backend logic, such as homepage routes, authentication routes, dashboard routes, and progress tracking routes.
-- `backend/device_catalog.py`: Defines the three core VTALP devices in one reusable catalog for dashboards, simulations, tutorials, and future tracking.
+- `backend/device_catalog.py`: Defines the three core SimLearn devices in one reusable catalog for dashboards, simulations, tutorials, and future tracking.
 - `backend/routes.py`: Defines the homepage, registration, login, logout, and protected dashboard routes.
 - `database/`: Stores database-related files.
 - `database/connection.py`: Provides helper functions for opening SQLite, closing it safely, and initializing database tables.
 - `database/schema.sql`: Contains the starter SQLite table definitions for users, progress, and assessment results.
 - `frontend/templates/`: Stores HTML pages rendered by Flask.
 - `frontend/templates/base.html`: Main page layout shared by other pages.
-- `frontend/templates/index.html`: Basic homepage for the VTALP platform.
+- `frontend/templates/index.html`: Basic homepage for the SimLearn platform.
 - `frontend/templates/register.html`: Registration form for new learners.
 - `frontend/templates/login.html`: Login form for existing learners.
 - `frontend/templates/dashboard.html`: Protected learner dashboard shown after login.
@@ -142,3 +142,4 @@ Logout clears the session and redirects the learner to the homepage.
 - Oscilloscope Tutorial: `http://127.0.0.1:5000/tutorials/oscilloscope`
 - Arduino Trainer Tutorial: `http://127.0.0.1:5000/tutorials/arduino`
 - Assessments: `http://127.0.0.1:5000/assessments/`
+

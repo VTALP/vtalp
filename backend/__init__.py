@@ -1,1 +1,2 @@
-"""Backend package for core VTALP web routes and application logic."""
+"""Backend package for core SimLearn web routes and application logic."""
+

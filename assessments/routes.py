@@ -11,7 +11,7 @@ assessments_bp = Blueprint("assessments", __name__)
 @assessments_bp.route("/")
 @login_required
 def assessment_home():
-    """Display protected assessment categories for VTALP's core devices."""
+    """Display protected assessment categories for SimLearn's core devices."""
     progress_data = get_user_progress(session.get("user_id"), url_for)
     progress_by_slug = {device["slug"]: device for device in progress_data["devices"]}
     tests = []
@@ -72,3 +72,4 @@ def oscilloscope():
 def arduino():
     """Render the protected Arduino Trainer assessment page."""
     return render_template("arduino_assessment.html", title="Arduino Trainer Assessment")
+

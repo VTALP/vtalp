@@ -1,1 +1,2 @@
-"""Simulation package for VTALP virtual instruments."""
+"""Simulation package for SimLearn virtual instruments."""
+

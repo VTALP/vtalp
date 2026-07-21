@@ -1,4 +1,4 @@
-"""Instructor dashboard helpers for VTALP.
+"""Instructor dashboard helpers for SimLearn.
 
 This module keeps class-level analytics separate from learner progress logic.
 The users table receives a simple role column: learner accounts stay as
@@ -190,7 +190,7 @@ def get_student_activity_log(db, devices):
             {
                 "type": "Login activity",
                 "student": row["full_name"] or row["email"],
-                "detail": "Logged in to VTALP",
+                "detail": "Logged in to SimLearn",
                 "timestamp": row["logged_in_at"],
             }
         )
@@ -217,3 +217,4 @@ def get_student_activity_log(db, devices):
 
     events.sort(key=lambda event: event["timestamp"] or "", reverse=True)
     return events[:20]
+

@@ -63,7 +63,7 @@
 
         <section class="tutorial-card">
             <h2>Introduction</h2>
-            <p>A digital multimeter is an electronic measuring instrument used to test electrical quantities. In VTALP, it helps you practice safe measurement habits before using real circuits.</p>
+            <p>A digital multimeter is an electronic measuring instrument used to test electrical quantities. In SimLearn, it helps you practice safe measurement habits before using real circuits.</p>
         </section>
 
         <section class="diagram-card anatomy-card" data-diagram="multimeter">
@@ -89,7 +89,7 @@
                     <button class="anatomy-hotspot" type="button" style="--x: 50%; --y: 16%;" data-title="Display Screen" data-purpose="Shows the measured value, unit, and warning symbols." data-usage="Technicians use it to confirm readings before deciding whether a circuit is working correctly." data-tip="Always check the unit on the display, not only the number.">Display Screen</button>
                     <button class="anatomy-hotspot" type="button" style="--x: 49%; --y: 43%;" data-title="Rotary Selector Dial" data-purpose="Selects the measurement mode before taking a reading." data-usage="Used when switching between voltage checks, resistance checks, and continuity tests." data-tip="Choose the mode before touching the circuit with the probes.">Rotary Dial</button>
                     <button class="anatomy-hotspot" type="button" style="--x: 33%; --y: 66%;" data-title="COM Port" data-purpose="Connection point for the black probe." data-usage="Used as the common reference terminal for almost every multimeter measurement." data-tip="Think of COM as the starting reference point for the meter.">COM Port</button>
-                    <button class="anatomy-hotspot" type="button" style="--x: 65%; --y: 66%;" data-title="V/Ohm Port" data-purpose="Connection point for the red probe when measuring voltage, resistance, or continuity." data-usage="Used for the common beginner measurements practiced in VTALP labs." data-tip="For these lessons, the red probe belongs here unless a task says otherwise.">V/Ohm Port</button>
+                    <button class="anatomy-hotspot" type="button" style="--x: 65%; --y: 66%;" data-title="V/Ohm Port" data-purpose="Connection point for the red probe when measuring voltage, resistance, or continuity." data-usage="Used for the common beginner measurements practiced in SimLearn labs." data-tip="For these lessons, the red probe belongs here unless a task says otherwise.">V/Ohm Port</button>
                     <button class="anatomy-hotspot" type="button" style="--x: 21%; --y: 87%;" data-title="Black Probe" data-purpose="The common probe that connects to the COM port." data-usage="Used on ground, the negative battery terminal, or one side of a component." data-tip="Place the black probe first to make the measurement more stable.">Black Probe</button>
                     <button class="anatomy-hotspot" type="button" style="--x: 79%; --y: 87%;" data-title="Red Probe" data-purpose="The active probe used to contact the point being measured." data-usage="Used on the positive terminal, signal point, or the other side of a component." data-tip="Move the red probe carefully; it is usually the probe that explores the circuit.">Red Probe</button>
                     <button class="anatomy-hotspot" type="button" style="--x: 50%; --y: 79%;" data-title="Test Points" data-purpose="The two circuit points where the probes make contact." data-usage="Used to measure the electrical relationship between two points in a circuit." data-tip="A good reading starts with clean, firm contact at both test points.">Test Points</button>
@@ -263,3 +263,4 @@
 {% block extra_scripts %}
 <script src="{{ url_for('static', filename='js/tutorial.js') }}"></script>
 {% endblock %}
+

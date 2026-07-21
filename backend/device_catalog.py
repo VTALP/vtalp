@@ -1,4 +1,4 @@
-"""Central device catalog for VTALP's core learning devices.
+"""Central device catalog for SimLearn's core learning devices.
 
 Keeping device metadata here prevents the dashboard, simulations, and tutorials
 from drifting apart when new learning devices are added later.
@@ -112,3 +112,4 @@ def build_tutorial_items(url_for):
 def get_device(slug):
     """Find one core device by slug for future assessments/progress tracking."""
     return next((device for device in CORE_DEVICES if device["slug"] == slug), None)
+

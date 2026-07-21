@@ -57,7 +57,7 @@ def instructor_required(view):
 
 @backend_bp.route("/")
 def home():
-    """Display the VTALP homepage."""
+    """Display the SimLearn homepage."""
     return render_template("index.html")
 
 
@@ -194,7 +194,7 @@ def logout():
 @backend_bp.route("/dashboard")
 @login_required
 def dashboard():
-    """Display the protected dashboard for VTALP's three core learning devices."""
+    """Display the protected dashboard for SimLearn's three core learning devices."""
     sidebar_expanded = request.args.get("view", "welcome") == "expanded"
     # Device cards come from one shared catalog so simulations, tutorials,
     # assessments, and progress tracking can reuse the same device structure.
@@ -295,3 +295,4 @@ def save_simulation_event(device_slug):
     saved = record_simulation_event(session["user_id"], device_slug, event_type, str(event_detail).strip())
     progress_data = get_user_progress(session["user_id"], url_for)
     return jsonify({"saved": saved, "progress": progress_data["summary"]})
+

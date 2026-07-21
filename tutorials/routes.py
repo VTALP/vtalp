@@ -11,7 +11,7 @@ tutorials_bp = Blueprint("tutorials", __name__)
 @tutorials_bp.route("/")
 @login_required
 def tutorial_home():
-    """Display the protected tutorial landing page for all VTALP devices."""
+    """Display the protected tutorial landing page for all SimLearn devices."""
     progress_data = get_user_progress(session.get("user_id"), url_for)
     progress_by_slug = {device["slug"]: device for device in progress_data["devices"]}
     lessons = []
@@ -73,3 +73,4 @@ def oscilloscope():
 def arduino():
     """Render the dedicated Arduino Trainer tutorial page."""
     return render_template("arduino_tutorial.html", title="Arduino Trainer Tutorial")
+

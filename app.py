@@ -10,7 +10,7 @@ from tutorials.routes import tutorials_bp
 
 
 def create_app():
-    """Create and configure the VTALP Flask application."""
+    """Create and configure the SimLearn Flask application."""
     app = Flask(
         __name__,
         template_folder="frontend/templates",
@@ -45,3 +45,4 @@ app = create_app()
 if __name__ == "__main__":
     # debug=True reloads the server automatically while developing.
     app.run(debug=True)
+
